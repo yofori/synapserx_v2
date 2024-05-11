@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:synapserx_v2/domain/usecases/provider.dart';
-import 'package:synapserx_v2/presentation/pages/transactions/last10tx_widget.dart';
+import 'package:synapserx_v2/presentation/pages/transactions/last_10_transactions_widget.dart';
 import 'package:synapserx_v2/presentation/view_model/user/user_provider.dart';
 import '../../../common/service.dart';
 import '../../../domain/models/adimages.dart';
@@ -28,7 +28,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class HomeDashboardPage extends ConsumerStatefulWidget {
-  const HomeDashboardPage({Key? key}) : super(key: key);
+  const HomeDashboardPage({super.key});
 
   @override
   ConsumerState<HomeDashboardPage> createState() => _HomeDashboardPageState();
@@ -102,7 +102,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
     if (GlobalData.isOnline == true) {
       getAdImages();
     }
-    getUserDetails();
+    //getUserDetails();
     super.initState();
     _sliderController = CarouselSliderController();
   }
@@ -330,8 +330,8 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                                 fontSize:
                                     MediaQuery.of(context).size.width * 0.035),
                           ),
-                          children: const <Widget>[
-                            Last10TxWidget(),
+                          children: <Widget>[
+                            TransactionsListView(),
                           ]),
                     ),
                   ),

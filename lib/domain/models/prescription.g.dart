@@ -13,7 +13,7 @@ _$PrescriptionImpl _$$PrescriptionImplFromJson(Map<String, dynamic> json) =>
       pxSurname: json['pxSurname'] as String,
       pxFirstname: json['pxFirstname'] as String,
       pxgender: json['pxgender'] as String,
-      pxAge: json['pxAge'] as int?,
+      pxAge: (json['pxAge'] as num?)?.toInt(),
       pxDOB: json['pxDOB'] as String?,
       prescriberID: json['prescriberID'] as String?,
       prescriberMDCRegNo: json['prescriberMDCRegNo'] as String?,
@@ -37,7 +37,7 @@ _$PrescriptionImpl _$$PrescriptionImplFromJson(Map<String, dynamic> json) =>
           .toList(),
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
-      iV: json['iV'] as int?,
+      iV: (json['iV'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$PrescriptionImplToJson(_$PrescriptionImpl instance) =>

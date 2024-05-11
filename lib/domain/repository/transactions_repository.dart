@@ -1,6 +1,5 @@
-import '../models/transaction.dart';
+import 'package:synapserx_v2/domain/models/transactionresponse.dart';
 
 abstract class TransactionsRepository {
-  Future<List<Transaction>> getLast10Transactions();
-  Future<List<Transaction>> getTransactions();
+  Future<TransactionResponse> getTransactions(int page);
 }

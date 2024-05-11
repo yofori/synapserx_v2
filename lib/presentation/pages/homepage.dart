@@ -13,7 +13,7 @@ import 'hompage_subpages/mypatients.dart';
 import 'hompage_subpages/medicineslist.dart';
 
 class HomePage extends ConsumerStatefulWidget {
-  const HomePage({Key? key, required this.showIndex}) : super(key: key);
+  const HomePage({super.key, required this.showIndex});
   final int showIndex;
 
   @override

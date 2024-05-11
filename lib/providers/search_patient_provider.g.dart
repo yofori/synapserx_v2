@@ -7,12 +7,12 @@ part of 'search_patient_provider.dart';
 // **************************************************************************
 
 String _$filteredTransactionListHash() =>
-    r'3d1dfd9947b0d04103ed37e0d8e2474f9625daa5';
+    r'080cebec22f3781c776cf9a94b04d41c4c609cce';
 
 /// See also [filteredTransactionList].
 @ProviderFor(filteredTransactionList)
 final filteredTransactionListProvider =
-    AutoDisposeProvider<List<dynamic>>.internal(
+    AutoDisposeProvider<List<Transaction>>.internal(
   filteredTransactionList,
   name: r'filteredTransactionListProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final filteredTransactionListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef FilteredTransactionListRef = AutoDisposeProviderRef<List<dynamic>>;
+typedef FilteredTransactionListRef = AutoDisposeProviderRef<List<Transaction>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

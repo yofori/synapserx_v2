@@ -19,7 +19,7 @@ _$MedicationsImpl _$$MedicationsImplFromJson(Map<String, dynamic> json) =>
       status: json['status'] as String?,
       dispenseAsWritten: json['dispenseAsWritten'] as bool?,
       allowRefills: json['allowRefills'] as bool?,
-      maxRefillsAllowed: json['maxRefillsAllowed'] as int?,
+      maxRefillsAllowed: (json['maxRefillsAllowed'] as num?)?.toInt(),
       sId: json['_id'] as String?,
       directionOfUse: json['directionOfUse'] as String?,
       dosageAllowedUnits: (json['dosageAllowedUnits'] as List<dynamic>?)

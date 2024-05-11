@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class SelectPatientPage extends StatefulWidget {
   const SelectPatientPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   UserAccountPageState createState() => UserAccountPageState();

@@ -13,7 +13,7 @@ _$LabReequestImpl _$$LabReequestImplFromJson(Map<String, dynamic> json) =>
       pxSurname: json['pxSurname'] as String,
       pxFirstname: json['pxFirstname'] as String,
       pxgender: json['pxgender'] as String,
-      pxAge: json['pxAge'] as int?,
+      pxAge: (json['pxAge'] as num?)?.toInt(),
       pxDOB: json['pxDOB'] as String?,
       prescriberID: json['prescriberID'] as String?,
       prescriberMDCRegNo: json['prescriberMDCRegNo'] as String?,

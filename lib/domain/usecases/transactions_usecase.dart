@@ -1,10 +1,9 @@
-import 'package:synapserx_v2/domain/models/transaction.dart';
+import 'package:synapserx_v2/domain/models/transactionresponse.dart';
 
 import '../repository/transactions_repository.dart';
 
 abstract class TransactionsUseCase {
-  Future<List<Transaction>> getTransactions();
-  Future<List<Transaction>> getLast10Transactions();
+  Future<TransactionResponse> getTransactions(int page);
 }
 
 class TransactionsUseCaseImpl extends TransactionsUseCase {
@@ -13,12 +12,7 @@ class TransactionsUseCaseImpl extends TransactionsUseCase {
   TransactionsUseCaseImpl(this.transactionsRepository);
 
   @override
-  Future<List<Transaction>> getTransactions() async {
-    return await transactionsRepository.getTransactions();
-  }
-
-  @override
-  Future<List<Transaction>> getLast10Transactions() async {
-    return await transactionsRepository.getLast10Transactions();
+  Future<TransactionResponse> getTransactions(int page) async {
+    return await transactionsRepository.getTransactions(page);
   }
 }

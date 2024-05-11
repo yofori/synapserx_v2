@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class DisplayPrescriptionPage extends StatefulWidget {
   const DisplayPrescriptionPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   DisplayPrescriptionState createState() => DisplayPrescriptionState();

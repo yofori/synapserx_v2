@@ -8,7 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 final streamProvider = StreamProvider<bool>((ref) {
   return Connectivity()
       .onConnectivityChanged
-      .map((event) => ConnectivityUtility.checkConnectivity(event));
+      .map((event) => ConnectivityUtility.checkConnectivity(event.first));
 });
 
 class ConnectivityUtility {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:synapserx_v2/presentation/pages/transactions/last_10_transactions_widget.dart';
+import 'package:synapserx_v2/presentation/pages/transactions/transactions_widget.dart';
 import 'package:synapserx_v2/presentation/pages/widgets/offlineindicator.dart';
 import 'package:synapserx_v2/presentation/view_model/transactions/transactions_provider.dart';
 import 'package:synapserx_v2/providers/search_patient_provider.dart';
-import '../widgets/emptylistwidget.dart';
 import '../widgets/synapsedrawerbutton.dart' as dwb;
 
 final isSearchEnabledProvider = StateProvider<bool>((ref) => false);
@@ -13,14 +13,14 @@ final searchPxProvider = StateProvider<String>((ref) => '');
 
 class MyOrdersPage extends ConsumerWidget {
   const MyOrdersPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GlobalKey<ScaffoldState> skey = GlobalKey();
-    final filteredTransactions = ref.watch(filteredTransactionListProvider);
-    final getAllTransactions = ref.watch(transactionsListProvider);
+    // final filteredTransactions = ref.watch(filteredTransactionListProvider);
+    // final getAllTransactions = ref.watch(fetchTransactionsProvider);
     bool isSearchEnabled = ref.watch(isSearchEnabledProvider);
     return GestureDetector(
         child: Scaffold(
@@ -76,52 +76,17 @@ class MyOrdersPage extends ConsumerWidget {
                       ]),
             body: RefreshIndicator(
               onRefresh: () async {
-                ref.invalidate(transactionsListProvider);
+                ref.invalidate(fetchTransactionsProvider);
               },
-              child: SingleChildScrollView(
-                child: Column(
-                  key: key,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    const OfflineIndicator(),
-                    getAllTransactions.when(
-                        data: (data) => data.isNotEmpty
-                            ? ListView(
-                                shrinkWrap: true,
-                                children: [
-                                  for (final tx in filteredTransactions)
-                                    ListTile(
-                                      title: Text(tx.patientFullname),
-                                      subtitle: Text(
-                                          '${tx.transactionType.toString()}: written on ${DateFormat('dd-MM-yyyy @ hh:mm a').format(DateTime.parse(tx.createdAt.toString()))}'),
-                                    )
-                                ],
-                              )
-                            : SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height - 200,
-                                child: const EmptyListWidget(
-                                  imageLocation:
-                                      'assets/images/doctor_prescription.png',
-                                  subtitle:
-                                      'You haven\'t created any patient orders yet. Create a new prescription or laboratory request by clicking on their buttons',
-                                  title: 'No Patient Orders Created',
-                                )),
-                        error: (error, stackTrace) => const SizedBox(
-                              height: double.infinity,
-                              child: Center(
-                                child: Text('Something went wrong'),
-                              ),
-                            ),
-                        loading: () => SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height - 200,
-                            child: const Center(
-                                child: CircularProgressIndicator())))
-                  ],
-                ),
-              ),
+              // child: Column(
+              //   key: key,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: const <Widget>[
+              //     OfflineIndicator(),
+              //     TransactionsWidget()
+              //   ],
+              // ),
+              child: const TransactionsWidget(),
             )));
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:synapserx_v2/common/service.dart';
 import 'package:synapserx_v2/domain/models/user.dart';
