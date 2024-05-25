@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:synapserx_v2/presentation/pages/widgets/loadingindicator.dart';
 
 class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({Key? key}) : super(key: key);
+  const ChangePasswordPage({super.key});
 
   @override
   ChangePasswordPageState createState() => ChangePasswordPageState();

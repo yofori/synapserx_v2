@@ -55,8 +55,18 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(
     BuildContext context,
   ) {
-    return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        bool canPop = await _onWillPop(context);
+        if (canPop) {
+          Platform.isIOS //iOS will not allow for programmatically exit the app so go to login page
+              ? {}
+              : SystemNavigator.pop();
+        } else {
+          return;
+        }
+      },
       child: Scaffold(
         body: UpgradeAlert(
             upgrader:
@@ -122,14 +132,11 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<bool> _onWillPop(BuildContext context) async {
-    bool? exitResult = await showDialog(
+    bool exitResult = await showDialog(
       context: context,
       builder: (context) => _buildExitDialog(context),
     );
-    if (exitResult!) {
-      Platform.isIOS //iOS will not allow for programmatically exit the app so go to login page
-          ? {true}
-          : SystemNavigator.pop();
+    if (exitResult) {
       return true;
     } else {
       return false;

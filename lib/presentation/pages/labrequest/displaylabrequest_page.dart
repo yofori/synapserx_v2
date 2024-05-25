@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class DisplayLabRequestPage extends StatefulWidget {
   const DisplayLabRequestPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   DisplayLabRequestPageState createState() => DisplayLabRequestPageState();

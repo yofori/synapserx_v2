@@ -11,7 +11,7 @@ import 'login_page.dart';
 import 'package:synapserx_v2/domain/models/user.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({super.key});
 
   @override
   ConsumerState<RegisterPage> createState() => _RegisterPageState();
@@ -332,7 +332,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           }),
                       Expanded(
                         child: RichText(
-                          textScaleFactor: 1.2,
+                          textScaler: const TextScaler.linear(1.2),
                           softWrap: true,
                           maxLines: 2,
                           text: TextSpan(
@@ -409,7 +409,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       children: [
                         const Text(
                           'Have an account?',
-                          textScaleFactor: 1.2,
+                          textScaler: TextScaler.linear(1.2),
                         ),
                         TextButton(
                             onPressed: () => Navigator.pushAndRemoveUntil(
@@ -419,7 +419,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 ModalRoute.withName('/')),
                             child: const Text(
                               'Login',
-                              textScaleFactor: 1.2,
+                              textScaler: TextScaler.linear(1.2),
                             )),
                       ],
                     ),

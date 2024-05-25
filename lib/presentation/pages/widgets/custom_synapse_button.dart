@@ -7,13 +7,13 @@ class RxButton extends StatelessWidget {
   final VoidCallback onTap;
   //final Function onTap;
   const RxButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.onTap,
     this.height,
     this.width,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

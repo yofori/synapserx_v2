@@ -4,8 +4,8 @@ import '../widgets/rxdrawer.dart';
 
 class MedicinesListPage extends StatefulWidget {
   const MedicinesListPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<MedicinesListPage> createState() => _MedicinesListPageState();

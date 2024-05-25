@@ -24,7 +24,7 @@ final firebaseinitializerProvider = FutureProvider<FirebaseApp>((ref) async {
 });
 
 class MyApp extends ConsumerWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GlobalData().getAppTemporaryDirectory();
@@ -34,7 +34,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        //visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: initialize.when(
           data: (data) {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class GetPrescriptionPage extends StatefulWidget {
   const GetPrescriptionPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   UserAccountPageState createState() => UserAccountPageState();

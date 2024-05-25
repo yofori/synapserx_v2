@@ -24,7 +24,6 @@ class TransactionsWidget extends HookConsumerWidget {
       final bool isBottom =
           controller.offset >= controller.position.maxScrollExtent &&
               !controller.position.outOfRange;
-      // (controller.position.pixels == controller.position.maxScrollExtent);
       if (isBottom && hasmore && !isFetchingMore) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           ref

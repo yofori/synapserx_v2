@@ -6,7 +6,7 @@ part of 'transactions_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchTransactionsHash() => r'b040f967ee9a8e64e0930ff2fc74c25c5e2b3ec0';
+String _$fetchTransactionsHash() => r'04ed6d747ca3697d963829de18bfd8fa6daebc6a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -41,9 +41,11 @@ class FetchTransactionsFamily extends Family<AsyncValue<TransactionResponse>> {
   /// See also [fetchTransactions].
   FetchTransactionsProvider call(
     int page,
+    String searchString,
   ) {
     return FetchTransactionsProvider(
       page,
+      searchString,
     );
   }
 
@@ -53,6 +55,7 @@ class FetchTransactionsFamily extends Family<AsyncValue<TransactionResponse>> {
   ) {
     return call(
       provider.page,
+      provider.searchString,
     );
   }
 
@@ -77,10 +80,12 @@ class FetchTransactionsProvider
   /// See also [fetchTransactions].
   FetchTransactionsProvider(
     int page,
+    String searchString,
   ) : this._internal(
           (ref) => fetchTransactions(
             ref as FetchTransactionsRef,
             page,
+            searchString,
           ),
           from: fetchTransactionsProvider,
           name: r'fetchTransactionsProvider',
@@ -92,6 +97,7 @@ class FetchTransactionsProvider
           allTransitiveDependencies:
               FetchTransactionsFamily._allTransitiveDependencies,
           page: page,
+          searchString: searchString,
         );
 
   FetchTransactionsProvider._internal(
@@ -102,9 +108,11 @@ class FetchTransactionsProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.page,
+    required this.searchString,
   }) : super.internal();
 
   final int page;
+  final String searchString;
 
   @override
   Override overrideWith(
@@ -121,6 +129,7 @@ class FetchTransactionsProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         page: page,
+        searchString: searchString,
       ),
     );
   }
@@ -132,13 +141,16 @@ class FetchTransactionsProvider
 
   @override
   bool operator ==(Object other) {
-    return other is FetchTransactionsProvider && other.page == page;
+    return other is FetchTransactionsProvider &&
+        other.page == page &&
+        other.searchString == searchString;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, page.hashCode);
+    hash = _SystemHash.combine(hash, searchString.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -148,6 +160,9 @@ mixin FetchTransactionsRef
     on AutoDisposeFutureProviderRef<TransactionResponse> {
   /// The parameter `page` of this provider.
   int get page;
+
+  /// The parameter `searchString` of this provider.
+  String get searchString;
 }
 
 class _FetchTransactionsProviderElement
@@ -157,6 +172,8 @@ class _FetchTransactionsProviderElement
 
   @override
   int get page => (origin as FetchTransactionsProvider).page;
+  @override
+  String get searchString => (origin as FetchTransactionsProvider).searchString;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

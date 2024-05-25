@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:synapserx_v2/domain/models/transaction.dart';
 import 'package:synapserx_v2/domain/usecases/provider.dart';
+import 'package:synapserx_v2/presentation/pages/hompage_subpages/myorders.dart';
 
 class TransactionsPaginatorController extends AsyncNotifier<List<Transaction>> {
   bool _hasmore = true;
   int page = 1;
   bool get hasmore => _hasmore;
+  String searchString = '';
 
   @override
   FutureOr<List<Transaction>> build() async {
@@ -28,13 +30,19 @@ class TransactionsPaginatorController extends AsyncNotifier<List<Transaction>> {
   }
 
   Future<List<Transaction>> fetchtransactions() async {
-    final results =
-        await ref.read(transactionsDataProvider).getTransactions(page);
+    final retrievedString = ref.watch(searchPxProvider);
+    final results = await ref
+        .read(transactionsDataProvider)
+        .getTransactions(page, retrievedString);
     _hasmore = ((page * 10) < results.transactionsCount);
     if (_hasmore) {
       page++;
     }
     return results.transactions;
+  }
+
+  Future<void> refresh() async {
+    page = 1;
   }
 }
 

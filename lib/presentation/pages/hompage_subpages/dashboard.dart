@@ -92,7 +92,6 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
     GlobalData.fullname =
         '${getData('title').toString()} ${getData('firstname').toString()} ${getData('surname').toString()}';
     GlobalData.mdcregno = getData('mdcregno').toString();
-    ;
   }
 
   late CarouselSliderController _sliderController;
@@ -330,7 +329,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                                 fontSize:
                                     MediaQuery.of(context).size.width * 0.035),
                           ),
-                          children: <Widget>[
+                          children: const <Widget>[
                             TransactionsListView(),
                           ]),
                     ),
@@ -402,7 +401,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                             topLeft: Radius.circular(10.0))),
                     child: const Text(
                       'Choose Patient Type',
-                      textScaleFactor: 1,
+                      textScaler: TextScaler.linear(1),
                       style: TextStyle(color: Colors.white),
                     )),
                 const SizedBox(
@@ -417,7 +416,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CreateAdhocPxPage(
+                              builder: (context) => const CreateAdhocPxPage(
                                   //isprescription: isprescription,
                                   )));
                     },
@@ -468,7 +467,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SelectPatientPage(
+                              builder: (context) => const SelectPatientPage(
                                   // title: 'Select Patient',
                                   // isprescription: isprescription,
                                   )));
@@ -524,28 +523,28 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
         });
   }
 
-  getPrescription(String prescriptionId) async {
-    try {
-      LoadingIndicatorDialog().show(context, 'Getting Prescprition ...');
-      // Prescription? prescription =
-      //     await _dioClient.getPrescription(prescriptionId);
-      LoadingIndicatorDialog().dismiss();
-      if (!mounted) return;
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DisplayPrescriptionPage(
-                  // prescriptionid: prescriptionId,
-                  // prescription: prescription,
-                  )));
-    } catch (err) {
-      LoadingIndicatorDialog().dismiss();
-      if (context.mounted) {
-        CustomSnackBar.showErrorSnackBar(
-            context, 'Could not retrieve prescription: ${err.toString()}');
-      }
-    }
-  }
+  // getPrescription(String prescriptionId) async {
+  //   try {
+  //     LoadingIndicatorDialog().show(context, 'Getting Prescprition ...');
+  //     // Prescription? prescription =
+  //     //     await _dioClient.getPrescription(prescriptionId);
+  //     LoadingIndicatorDialog().dismiss();
+  //     if (!mounted) return;
+  //     Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => const DisplayPrescriptionPage(prescriberId: prescriberId,
+  //                 // prescriptionid: prescriptionId,
+  //                 // prescription: prescription,
+  //                 )));
+  //   } catch (err) {
+  //     LoadingIndicatorDialog().dismiss();
+  //     if (context.mounted) {
+  //       CustomSnackBar.showErrorSnackBar(
+  //           context, 'Could not retrieve prescription: ${err.toString()}');
+  //     }
+  //   }
+  // }
 
   getLabRequest(String labrequestid) async {
     try {

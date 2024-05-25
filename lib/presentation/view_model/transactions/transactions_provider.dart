@@ -6,7 +6,7 @@ part 'transactions_provider.g.dart';
 
 @riverpod
 Future<TransactionResponse> fetchTransactions(
-    FetchTransactionsRef ref, int page) {
+    FetchTransactionsRef ref, int page, String searchString) {
   final transactions = ref.watch(transactionsDataProvider);
-  return transactions.getTransactions(page);
+  return transactions.getTransactions(page, searchString);
 }

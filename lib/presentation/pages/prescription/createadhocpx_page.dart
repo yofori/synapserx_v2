@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class CreateAdhocPxPage extends StatefulWidget {
   const CreateAdhocPxPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   CreateAdhocPxPageState createState() => CreateAdhocPxPageState();

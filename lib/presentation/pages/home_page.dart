@@ -5,7 +5,7 @@ import 'package:synapserx_v2/presentation/view_model/user/user_provider.dart';
 import '../../providers/auth_provider.dart';
 
 class HomePage extends ConsumerWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,14 +47,14 @@ class HomePage extends ConsumerWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
                 onPressed: () async {
                   await ref.watch(userProfileProvider.notifier).fetchUser();
                 },
-                child: Text('Get Profile')),
+                child: const Text('Get Profile')),
           ],
         ),
       ),

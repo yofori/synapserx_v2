@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:synapserx_v2/presentation/pages/transactions/last_10_transactions_widget.dart';
-import 'package:synapserx_v2/presentation/pages/transactions/transactions_widget.dart';
-import 'package:synapserx_v2/presentation/pages/widgets/offlineindicator.dart';
+import 'package:synapserx_v2/presentation/pages/transactions/transactions_list_widget.dart';
 import 'package:synapserx_v2/presentation/view_model/transactions/transactions_provider.dart';
-import 'package:synapserx_v2/providers/search_patient_provider.dart';
 import '../widgets/synapsedrawerbutton.dart' as dwb;
 
 final isSearchEnabledProvider = StateProvider<bool>((ref) => false);
@@ -19,8 +16,6 @@ class MyOrdersPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GlobalKey<ScaffoldState> skey = GlobalKey();
-    // final filteredTransactions = ref.watch(filteredTransactionListProvider);
-    // final getAllTransactions = ref.watch(fetchTransactionsProvider);
     bool isSearchEnabled = ref.watch(isSearchEnabledProvider);
     return GestureDetector(
         child: Scaffold(
@@ -31,9 +26,9 @@ class MyOrdersPage extends ConsumerWidget {
                     : TextFormField(
                         autofocus:
                             true, //Display the keyboard when TextField is displayed
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.black,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 16,
                         ),
                         textInputAction: TextInputAction.search,
@@ -43,15 +38,11 @@ class MyOrdersPage extends ConsumerWidget {
                               .update((state) => state = value);
                         },
                         decoration: const InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.all(12.0),
-                          hintText: "Enter patient's name to search",
-                          hintStyle: TextStyle(
-                            color: Colors.white60,
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        )),
+                          //labelText: 'Search',
+                          hintText: 'Type name to search...',
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      ),
                 actions: !isSearchEnabled
                     ? [
                         IconButton(
@@ -78,15 +69,7 @@ class MyOrdersPage extends ConsumerWidget {
               onRefresh: () async {
                 ref.invalidate(fetchTransactionsProvider);
               },
-              // child: Column(
-              //   key: key,
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   children: const <Widget>[
-              //     OfflineIndicator(),
-              //     TransactionsWidget()
-              //   ],
-              // ),
-              child: const TransactionsWidget(),
+              child: const TransactionsListWidget(),
             )));
   }
 }

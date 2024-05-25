@@ -8,7 +8,7 @@ part 'search_patient_provider.g.dart';
 List<Transaction> filteredTransactionList(FilteredTransactionListRef ref) {
   List<Transaction> filteredTransactions = [];
   final filter = ref.watch(searchPxProvider);
-  final transactions = ref.watch(fetchTransactionsProvider(1));
+  final transactions = ref.watch(fetchTransactionsProvider(0, ''));
   transactions.whenData((value) {
     filteredTransactions = value.transactions
         .where((element) =>
