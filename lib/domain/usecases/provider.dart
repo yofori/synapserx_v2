@@ -7,7 +7,7 @@ import 'system_usecase.dart';
 import 'transactions_usecase.dart';
 
 final userDataProvider = Provider<UserUseCase>((ref) {
-  return UserUseCaseImpl(ref.read(registerUserProvider));
+  return UserUseCaseImpl(ref.read(userProfileProvider));
 });
 
 final systemDataProvider = Provider<SystemUseCase>((ref) {

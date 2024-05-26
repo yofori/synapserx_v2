@@ -21,4 +21,14 @@ class UserUseCaseImpl extends UserUseCase {
   Future<UserInfo> fetchUserProfile() async {
     return await userRepository.fetchUserProfile();
   }
+
+  @override
+  Future<UserInfo> updateUserProfile() async {
+    return await userRepository.updateUserProfile();
+  }
+
+  @override
+  Future<UserInfo> createUserProfile(UserInfo userInfo) async {
+    return await userRepository.createUserProfile(userInfo);
+  }
 }

@@ -3,6 +3,7 @@ import 'package:synapserx_v2/domain/repository/prescription_repository.dart';
 
 abstract class PrescriptionUseCase {
   Future<Prescription> getPrescription(String prescriptionId);
+  Future<void> deletePrescription(String prescriptionId);
 }
 
 class PrescriptionUseCaseImpl extends PrescriptionUseCase {
@@ -13,5 +14,10 @@ class PrescriptionUseCaseImpl extends PrescriptionUseCase {
   @override
   Future<Prescription> getPrescription(String prescriptionId) async {
     return await prescriptionRepository.getPrescription(prescriptionId);
+  }
+
+  @override
+  Future<void> deletePrescription(String prescriptionId) async {
+    return await prescriptionRepository.deletePrescription(prescriptionId);
   }
 }

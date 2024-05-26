@@ -8,11 +8,7 @@ import 'package:synapserx_v2/domain/repository/user_repository.dart';
 import '../../domain/repository/transactions_repository.dart';
 import 'transactions_repository_implementations.dart';
 
-final registerUserProvider = Provider<UserRepository>((ref) {
-  return UserRepositoryImpl();
-});
-
-final fetchUserProfileProvider = Provider<UserRepository>((ref) {
+final userProfileProvider = Provider<UserRepository>((ref) {
   return UserRepositoryImpl();
 });
 

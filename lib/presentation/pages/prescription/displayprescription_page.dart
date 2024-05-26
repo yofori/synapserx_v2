@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:synapserx_v2/common/pdf_api.dart';
 import 'package:synapserx_v2/common/pdf_prescription_api.dart' as pdfgen;
 import 'package:synapserx_v2/domain/models/prescription.dart';
+import 'package:synapserx_v2/domain/usecases/provider.dart';
 import 'package:synapserx_v2/presentation/pages/prescription/editprescriptions.dart';
 import 'package:synapserx_v2/presentation/view_model/prescriptions/prescriptions_provider.dart';
 
@@ -347,22 +348,17 @@ class PrescriptionActionBar extends ConsumerWidget {
                             backgroundColor: Colors.green,
                           ),
                           onPressed: () async {
-                            // String prescriptionID =
-                            //     widget.prescription.sId.toString();
-                            // await _dioClient
-                            //     .deletePrescription(
-                            //         prescriptionID: prescriptionID)
-                            //     .whenComplete(() => {
-                            //           Navigator.pop(context),
-                            //           widget.notifyParent(3),
-                            //           ScaffoldMessenger.of(context)
-                            //               .showSnackBar(SnackBar(
-                            //             content: const Text(
-                            //                 'Prescription deleted'),
-                            //             backgroundColor:
-                            //                 Colors.green.shade300,
-                            //           ))
-                            //         });
+                            await ref
+                                .read(prescriptionDataProvider)
+                                .deletePrescription(prescription.sId.toString())
+                                .whenComplete(() {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: const Text('Prescription deleted'),
+                                backgroundColor: Colors.green.shade300,
+                              ));
+                            });
                           },
                           child: const Text(
                             'Delete',

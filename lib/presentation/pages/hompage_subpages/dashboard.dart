@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:synapserx_v2/domain/models/user_info.dart';
 import 'package:synapserx_v2/domain/usecases/provider.dart';
 import 'package:synapserx_v2/presentation/pages/transactions/last_10_transactions_widget.dart';
+import 'package:synapserx_v2/presentation/pages/user/myprofile.dart';
 import 'package:synapserx_v2/presentation/view_model/user/user_provider.dart';
 import '../../../common/service.dart';
 import '../../../domain/models/adimages.dart';
 import '../prescription/createadhocpx_page.dart';
-import '../prescription/displayprescription_page.dart';
 import '../prescription/getprescription_page.dart';
 import '../prescription/selectpx_page.dart';
 import '../user/useraccounts.dart';
@@ -68,30 +69,61 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
 
   Future<void> getUserDetails() async {
     const storage = FlutterSecureStorage();
-    await ref
-        .read(userDataProvider)
-        .fetchUserProfile()
-        .then((userInfo) async => {
-              await storage.write(
-                  key: 'fullname',
-                  value:
-                      '${userInfo.title.toString()} ${userInfo.firstname} ${userInfo.surname}'),
-              await storage.write(
-                  key: 'mdcregno',
-                  value: userInfo.prescriberMdcRegNo.toString()),
-              await storage.write(
-                  key: 'prescriberuid', value: userInfo.id.toString()),
-              await storage.write(
-                  key: 'title', value: userInfo.title.toString()),
-            });
+    try {
+      await ref
+          .read(userDataProvider)
+          .fetchUserProfile()
+          .then((userInfo) async => {
+                await storage.write(
+                    key: 'fullname',
+                    value:
+                        '${userInfo.title.toString()} ${userInfo.firstname} ${userInfo.surname}'),
+                await storage.write(
+                    key: 'mdcregno',
+                    value: userInfo.prescriberMdcRegNo.toString()),
+                await storage.write(
+                    key: 'prescriberuid', value: userInfo.id.toString()),
+                await storage.write(
+                    key: 'title', value: userInfo.title.toString()),
+              });
 
-    //now make entries to Global Data As well for quick retrieval
-    GlobalData.firstname = getData('firstname').toString();
-    GlobalData.surname = getData('surname').toString();
-    GlobalData.prescriberid = getData('prescriberuid').toString();
-    GlobalData.fullname =
-        '${getData('title').toString()} ${getData('firstname').toString()} ${getData('surname').toString()}';
-    GlobalData.mdcregno = getData('mdcregno').toString();
+      //now make entries to Global Data As well for quick retrieval
+      GlobalData.firstname = getData('firstname').toString();
+      GlobalData.surname = getData('surname').toString();
+      GlobalData.prescriberid = getData('prescriberuid').toString();
+      GlobalData.fullname =
+          '${getData('title').toString()} ${getData('firstname').toString()} ${getData('surname').toString()}';
+      GlobalData.mdcregno = getData('mdcregno').toString();
+    } catch (err) {
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text(
+              'User Profile Error!',
+              textAlign: TextAlign.center,
+            ),
+            content: const Text(
+                'A user profile for your login credentials does not exist. Please create a user profile to continue using synapseRx'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => ProfilePage(
+                                  user: UserInfo(),
+                                )),
+                        ModalRoute.withName('/'));
+                  },
+                  child: const Text("Create Profile")),
+              TextButton(onPressed: () {}, child: const Text('Cancel'))
+            ],
+          ),
+        );
+      }
+    }
   }
 
   late CarouselSliderController _sliderController;
@@ -101,7 +133,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
     if (GlobalData.isOnline == true) {
       getAdImages();
     }
-    //getUserDetails();
+    getUserDetails();
     super.initState();
     _sliderController = CarouselSliderController();
   }

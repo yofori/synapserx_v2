@@ -17,4 +17,15 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
       throw errorMessage;
     }
   }
+
+  @override
+  Future<void> deletePrescription(String prescriptionid) async {
+    try {
+      await DioClient.instance.put('/prescription/delete/',
+          queryParameters: {"prescriptionId": prescriptionid});
+    } on DioException catch (err) {
+      final errorMessage = (err).toString();
+      throw errorMessage;
+    }
+  }
 }
