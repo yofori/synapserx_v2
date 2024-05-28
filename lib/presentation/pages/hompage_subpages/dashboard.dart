@@ -76,11 +76,14 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
           .then((userInfo) async => {
                 await storage.write(
                     key: 'fullname',
-                    value:
-                        '${userInfo.title.toString()} ${userInfo.firstname} ${userInfo.surname}'),
+                    value: '${userInfo.firstname} ${userInfo.surname}'),
+                await storage.write(
+                    key: 'firstname', value: userInfo.firstname.toString()),
+                await storage.write(
+                    key: 'surname', value: userInfo.surname.toString()),
                 await storage.write(
                     key: 'mdcregno',
-                    value: userInfo.prescriberMdcRegNo.toString()),
+                    value: userInfo.prescriberMDCRegNo.toString()),
                 await storage.write(
                     key: 'prescriberuid', value: userInfo.id.toString()),
                 await storage.write(
@@ -597,7 +600,8 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
     } catch (err) {
       LoadingIndicatorDialog().dismiss();
       if (context.mounted) {
-        CustomSnackBar.showErrorSnackBar(context, 'Error: ${err.toString()}');
+        CustomSnackBar.showErrorSnackBar(context,
+            message: 'Error: ${err.toString()}');
       }
     }
   }

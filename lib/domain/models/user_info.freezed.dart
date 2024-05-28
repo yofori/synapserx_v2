@@ -29,7 +29,7 @@ mixin _$UserInfo {
   String? get status => throw _privateConstructorUsedError;
   String? get confirmationCode => throw _privateConstructorUsedError;
   @JsonKey(name: 'prescriberMDCRegNo')
-  String? get prescriberMdcRegNo => throw _privateConstructorUsedError;
+  String? get prescriberMDCRegNo => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get surname => throw _privateConstructorUsedError;
   String? get firstname => throw _privateConstructorUsedError;
@@ -64,7 +64,7 @@ abstract class $UserInfoCopyWith<$Res> {
       String? role,
       String? status,
       String? confirmationCode,
-      @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMdcRegNo,
+      @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMDCRegNo,
       String? title,
       String? surname,
       String? firstname,
@@ -99,7 +99,7 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
     Object? role = freezed,
     Object? status = freezed,
     Object? confirmationCode = freezed,
-    Object? prescriberMdcRegNo = freezed,
+    Object? prescriberMDCRegNo = freezed,
     Object? title = freezed,
     Object? surname = freezed,
     Object? firstname = freezed,
@@ -142,9 +142,9 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
           ? _value.confirmationCode
           : confirmationCode // ignore: cast_nullable_to_non_nullable
               as String?,
-      prescriberMdcRegNo: freezed == prescriberMdcRegNo
-          ? _value.prescriberMdcRegNo
-          : prescriberMdcRegNo // ignore: cast_nullable_to_non_nullable
+      prescriberMDCRegNo: freezed == prescriberMDCRegNo
+          ? _value.prescriberMDCRegNo
+          : prescriberMDCRegNo // ignore: cast_nullable_to_non_nullable
               as String?,
       title: freezed == title
           ? _value.title
@@ -214,7 +214,7 @@ abstract class _$$UserInfoImplCopyWith<$Res>
       String? role,
       String? status,
       String? confirmationCode,
-      @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMdcRegNo,
+      @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMDCRegNo,
       String? title,
       String? surname,
       String? firstname,
@@ -247,7 +247,7 @@ class __$$UserInfoImplCopyWithImpl<$Res>
     Object? role = freezed,
     Object? status = freezed,
     Object? confirmationCode = freezed,
-    Object? prescriberMdcRegNo = freezed,
+    Object? prescriberMDCRegNo = freezed,
     Object? title = freezed,
     Object? surname = freezed,
     Object? firstname = freezed,
@@ -290,9 +290,9 @@ class __$$UserInfoImplCopyWithImpl<$Res>
           ? _value.confirmationCode
           : confirmationCode // ignore: cast_nullable_to_non_nullable
               as String?,
-      prescriberMdcRegNo: freezed == prescriberMdcRegNo
-          ? _value.prescriberMdcRegNo
-          : prescriberMdcRegNo // ignore: cast_nullable_to_non_nullable
+      prescriberMDCRegNo: freezed == prescriberMDCRegNo
+          ? _value.prescriberMDCRegNo
+          : prescriberMDCRegNo // ignore: cast_nullable_to_non_nullable
               as String?,
       title: freezed == title
           ? _value.title
@@ -357,7 +357,7 @@ class _$UserInfoImpl implements _UserInfo {
       this.role,
       this.status,
       this.confirmationCode,
-      @JsonKey(name: 'prescriberMDCRegNo') this.prescriberMdcRegNo,
+      @JsonKey(name: 'prescriberMDCRegNo') this.prescriberMDCRegNo,
       this.title,
       this.surname,
       this.firstname,
@@ -392,7 +392,7 @@ class _$UserInfoImpl implements _UserInfo {
   final String? confirmationCode;
   @override
   @JsonKey(name: 'prescriberMDCRegNo')
-  final String? prescriberMdcRegNo;
+  final String? prescriberMDCRegNo;
   @override
   final String? title;
   @override
@@ -430,7 +430,7 @@ class _$UserInfoImpl implements _UserInfo {
 
   @override
   String toString() {
-    return 'UserInfo(id: $id, username: $username, password: $password, email: $email, role: $role, status: $status, confirmationCode: $confirmationCode, prescriberMdcRegNo: $prescriberMdcRegNo, title: $title, surname: $surname, firstname: $firstname, countryCode: $countryCode, telephoneNo: $telephoneNo, specialty: $specialty, signature: $signature, lastLogin: $lastLogin, prescriberInstitutions: $prescriberInstitutions, createdAt: $createdAt, updatedAt: $updatedAt, v: $v)';
+    return 'UserInfo(id: $id, username: $username, password: $password, email: $email, role: $role, status: $status, confirmationCode: $confirmationCode, prescriberMDCRegNo: $prescriberMDCRegNo, title: $title, surname: $surname, firstname: $firstname, countryCode: $countryCode, telephoneNo: $telephoneNo, specialty: $specialty, signature: $signature, lastLogin: $lastLogin, prescriberInstitutions: $prescriberInstitutions, createdAt: $createdAt, updatedAt: $updatedAt, v: $v)';
   }
 
   @override
@@ -448,8 +448,8 @@ class _$UserInfoImpl implements _UserInfo {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.confirmationCode, confirmationCode) ||
                 other.confirmationCode == confirmationCode) &&
-            (identical(other.prescriberMdcRegNo, prescriberMdcRegNo) ||
-                other.prescriberMdcRegNo == prescriberMdcRegNo) &&
+            (identical(other.prescriberMDCRegNo, prescriberMDCRegNo) ||
+                other.prescriberMDCRegNo == prescriberMDCRegNo) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.surname, surname) || other.surname == surname) &&
             (identical(other.firstname, firstname) ||
@@ -482,7 +482,7 @@ class _$UserInfoImpl implements _UserInfo {
         role,
         status,
         confirmationCode,
-        prescriberMdcRegNo,
+        prescriberMDCRegNo,
         title,
         surname,
         firstname,
@@ -520,7 +520,7 @@ abstract class _UserInfo implements UserInfo {
       final String? role,
       final String? status,
       final String? confirmationCode,
-      @JsonKey(name: 'prescriberMDCRegNo') final String? prescriberMdcRegNo,
+      @JsonKey(name: 'prescriberMDCRegNo') final String? prescriberMDCRegNo,
       final String? title,
       final String? surname,
       final String? firstname,
@@ -554,7 +554,7 @@ abstract class _UserInfo implements UserInfo {
   String? get confirmationCode;
   @override
   @JsonKey(name: 'prescriberMDCRegNo')
-  String? get prescriberMdcRegNo;
+  String? get prescriberMDCRegNo;
   @override
   String? get title;
   @override

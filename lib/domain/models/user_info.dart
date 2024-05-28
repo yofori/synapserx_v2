@@ -13,7 +13,7 @@ class UserInfo with _$UserInfo {
     String? role,
     String? status,
     String? confirmationCode,
-    @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMdcRegNo,
+    @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMDCRegNo,
     String? title,
     String? surname,
     String? firstname,

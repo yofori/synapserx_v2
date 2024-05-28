@@ -167,6 +167,12 @@ class Authentication {
     return firebaseuid;
   }
 
+  Future<String?> getFirebaseUserEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    var firebaseuseremail = user?.email;
+    return firebaseuseremail;
+  }
+
   //change user ed password
   Future<void> changePassword(String newPassword) async {
     final user = _auth.currentUser;

@@ -492,7 +492,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       } catch (e) {
         LoadingIndicatorDialog().dismiss();
         if (context.mounted) {
-          CustomSnackBar.showErrorSnackBar(context, 'Error: ${e.toString()}');
+          CustomSnackBar.showErrorSnackBar(context, message: '$e');
         }
       }
       LoadingIndicatorDialog().dismiss();

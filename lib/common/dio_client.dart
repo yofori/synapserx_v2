@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -52,7 +54,7 @@ class DioClient {
   }
 
   ///Post Method
-  Future<Map<String, dynamic>> post(String path,
+  Future<dynamic> post(String path,
       {data,
       Map<String, dynamic>? queryParameters,
       Options? options,
@@ -69,15 +71,18 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return response.data;
+      if (response.statusCode == 201) {
+        return response.data;
+      }
     } on DioException catch (e) {
+      log(e.response!.data.toString());
       String errorMessage = _handleDioExceptionError(e);
       throw errorMessage;
     }
   }
 
   ///Put Method
-  Future<Map<String, dynamic>> put(String path,
+  Future<dynamic> put(String path,
       {data,
       Map<String, dynamic>? queryParameters,
       Options? options,

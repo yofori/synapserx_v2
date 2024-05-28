@@ -23,8 +23,8 @@ class CustomSnackBar {
     );
   }
 
-  static void showErrorSnackBar(BuildContext context, String string,
-      {String? message,
+  static void showErrorSnackBar(BuildContext context,
+      {required String message,
       int milliseconds = 5000,
       SnackBarBehavior snackBarBehavior = SnackBarBehavior.fixed}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -33,7 +33,7 @@ class CustomSnackBar {
         behavior: snackBarBehavior,
         duration: Duration(milliseconds: milliseconds),
         content: SelectableText(
-          message ?? 'An error occured',
+          message,
           style: const TextStyle(color: Colors.white),
         ),
       ),

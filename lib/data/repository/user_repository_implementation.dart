@@ -49,7 +49,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<UserInfo> createUserProfile(UserInfo userInfo) async {
     try {
       final response = await DioClient.instance
-          .post('/user/updateuserinfo', data: userInfo.toJson());
+          .post('/user/createuserinfo', data: userInfo.toJson());
       return UserInfo.fromJson(response);
     } on DioException catch (err) {
       final errorMessage = (err).toString();

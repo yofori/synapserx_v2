@@ -1,6 +1,7 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:synapserx_v2/domain/models/user_info.dart';
 import 'package:synapserx_v2/presentation/pages/widgets/snackbar.dart';
 import '../../../common/service.dart';
@@ -19,40 +20,105 @@ class RxDrawer extends ConsumerWidget {
     super.key,
   });
 
+  Future<String?> getData(String key) async {
+    const storage = FlutterSecureStorage();
+    final String? value = await storage.read(key: key);
+    return value;
+  }
+
+  String getInitials(fullname) {
+    List<String> names = fullname.split(" ");
+    String initials = "";
+    int numWords = 2;
+
+    if (numWords < names.length) {
+      numWords = names.length;
+    }
+    for (var i = 0; i < numWords; i++) {
+      initials += names[i][0];
+    }
+    return initials;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authenticationProvider);
+    final auth = ref.watch(fireBaseAuthProvider);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           SizedBox(
-            height: 160,
+            height: 200,
             child: DrawerHeader(
               decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
               child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 27,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                        maxRadius: 25,
-                        child: Text(
-                          GlobalData.firstname[0] + GlobalData.surname[0],
-                          style: const TextStyle(fontSize: 20),
-                        )),
-                  ),
+                  FutureBuilder(
+                      future: getData('fullname'),
+                      builder: (context, AsyncSnapshot<String?> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 29,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                                maxRadius: 27,
+                                child: Text(
+                                  getInitials('${snapshot.data}'),
+                                  style: const TextStyle(fontSize: 20),
+                                )),
+                          );
+                        }
+                        return const CircleAvatar(
+                          radius: 29,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                              maxRadius: 27,
+                              child: Text(
+                                '',
+                                style: TextStyle(fontSize: 20),
+                              )),
+                        );
+                      }),
                   const SizedBox(height: 10),
-                  Text(
-                    GlobalData.fullname,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    GlobalData.mdcregno,
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  FutureBuilder(
+                      future: getData('fullname'),
+                      builder: (context, AsyncSnapshot<String?> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        if (snapshot.hasData) {
+                          return Text(
+                            '${snapshot.data}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04),
+                          );
+                        }
+                        return Text(auth.currentUser!.displayName.toString());
+                      }),
+                  FutureBuilder(
+                      future: getData('mdcregno'),
+                      builder: (context, AsyncSnapshot<String?> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        if (snapshot.hasData) {
+                          return Text(
+                            '${snapshot.data}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04),
+                          );
+                        }
+                        return const Text('');
+                      }),
                 ],
               ),
             ),
@@ -106,7 +172,7 @@ class RxDrawer extends ConsumerWidget {
                 } on Exception catch (e) {
                   LoadingIndicatorDialog().dismiss();
                   if (context.mounted) {
-                    CustomSnackBar.showErrorSnackBar(context, e.toString());
+                    CustomSnackBar.showErrorSnackBar(context, message: '$e');
                   }
                 }
               }),

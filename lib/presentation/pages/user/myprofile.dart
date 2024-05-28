@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:country_code_picker/country_code_picker.dart';
@@ -6,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:signature/signature.dart';
+import 'package:synapserx_v2/common/auth_service.dart';
 import 'package:synapserx_v2/common/service.dart';
 import 'package:synapserx_v2/data/repository/provider.dart';
 import 'package:synapserx_v2/domain/models/user_info.dart';
-import 'package:synapserx_v2/domain/usecases/provider.dart';
 import 'package:synapserx_v2/main.dart';
+import 'package:synapserx_v2/presentation/pages/widgets/snackbar.dart';
 
 import '../widgets/loadingindicator.dart';
 
@@ -28,7 +30,7 @@ class ProfilePage extends ConsumerStatefulWidget {
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController mdcRegController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
   TextEditingController firstnameController = TextEditingController();
   TextEditingController telephoneController = TextEditingController();
@@ -203,26 +205,26 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       controller: firstnameController,
                     ),
                     const SizedBox(height: 20.0),
-                    // TextFormField(
-                    //   onChanged: (value) => setState(() {
-                    //     hasProfileChanged = true;
-                    //   }),
-                    //   decoration: const InputDecoration(
-                    //       border: OutlineInputBorder(),
-                    //       labelText: 'Email',
-                    //       hintText: 'Enter your email address'),
-                    //   keyboardType: TextInputType.emailAddress,
-                    //   validator: (val) {
-                    //     if ((val!.isNotEmpty) &&
-                    //         !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
-                    //             .hasMatch(val)) {
-                    //       return "Enter a valid email address";
-                    //     }
-                    //     return null;
-                    //   },
-                    //   controller: emailController,
-                    // ),
-                    // const SizedBox(height: 20.0),
+                    TextFormField(
+                      textCapitalization: TextCapitalization.characters,
+                      onChanged: (value) => setState(() {
+                        hasProfileChanged = true;
+                      }),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'MDC Reg No',
+                          hintText: 'Enter your MDC Reg No'),
+                      keyboardType: TextInputType.text,
+                      validator: (val) {
+                        if ((val!.isNotEmpty) &&
+                            !RegExp(r"MDC\/RN\/\d{4,}").hasMatch(val)) {
+                          return "Enter a valid MDC Reg No";
+                        }
+                        return null;
+                      },
+                      controller: mdcRegController,
+                    ),
+                    const SizedBox(height: 20.0),
                     TextFormField(
                       onChanged: (value) => setState(() {
                         hasProfileChanged = true;
@@ -403,7 +405,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       firstnameController.text = widget.user.firstname ?? '';
       surnameController.text = widget.user.surname ?? '';
       telephoneController.text = widget.user.telephoneNo ?? '';
-      emailController.text = widget.user.email ?? '';
+      mdcRegController.text = widget.user.email ?? '';
       dropdownvalue = widget.user.title;
       countryCode = widget.user.countryCode ?? "+233";
       if (widget.user.specialty != null) {
@@ -421,7 +423,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       "firstname": firstnameController.text,
       "surname": surnameController.text,
       "telephoneNo": telephoneController.text,
-      "email": emailController.text,
+      "prescriberMDCRegNo": mdcRegController.text,
       "countryCode": countryCode,
       "title": dropdownvalue,
       "specialty": specialty,
@@ -453,37 +455,35 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   Future<void> createUserInfo() async {
+    var email = await Authentication().getFirebaseUserEmail();
     UserInfo userInfo = UserInfo(
         firstname: firstnameController.text,
         surname: surnameController.text,
         telephoneNo: telephoneController.text,
-        email: emailController.text,
+        prescriberMDCRegNo: mdcRegController.text,
         countryCode: countryCode,
         title: dropdownvalue,
         specialty: specialty,
+        email: email,
         signature: isSignaturechanged
             ? base64.encode(signatureImage as List<int>)
             : null);
-
     try {
-      //LoadingIndicatorDialog().show(context, 'Creating your user profile ...');
+      LoadingIndicatorDialog().show(context, 'Creating your user profile ...');
       await ref.read(userProfileProvider).createUserProfile(userInfo);
 
-      //LoadingIndicatorDialog().dismiss();
-      scaffoldMessengerKey.currentState!.showSnackBar(const SnackBar(
-        content: Text('Your profile has been successfully createdd'),
-        backgroundColor: Colors.green,
-      ));
+      LoadingIndicatorDialog().dismiss();
+      CustomSnackBar.showSuccessSnackBar(context,
+          message: 'Your profile has been successfully createdd');
       if (isSignaturechanged) {
         GlobalData.signature = base64.encode(signatureImage as List<int>);
       }
-      if (context.mounted) Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     } catch (e) {
-      //LoadingIndicatorDialog().dismiss();
-      scaffoldMessengerKey.currentState!.showSnackBar(SnackBar(
-        content: Text('Error updating your user info: $e'),
-        backgroundColor: Colors.red,
-      ));
+      LoadingIndicatorDialog().dismiss();
+      CustomSnackBar.showErrorSnackBar(context, message: '$e');
     }
   }
 
