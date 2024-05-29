@@ -9,7 +9,7 @@ class SystemRepositoryImpl implements SystemRepository {
   Future<List<ADImages>> getADImages() async {
     try {
       final response = await DioClient.instance.get(
-        '/getcurrentimages',
+        '/images/getcurrentimages',
       );
       return (response as List).map((x) => ADImages.fromJson(x)).toList();
     } on DioException catch (err) {

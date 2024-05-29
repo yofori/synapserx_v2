@@ -5,6 +5,7 @@ part 'user_info.g.dart';
 
 @freezed
 class UserInfo with _$UserInfo {
+  @JsonSerializable(explicitToJson: true)
   factory UserInfo({
     @JsonKey(name: '_id') String? id,
     String? username,

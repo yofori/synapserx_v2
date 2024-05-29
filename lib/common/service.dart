@@ -16,8 +16,8 @@ class GlobalData {
   static String signature = '';
   static String defaultAccount = '';
   static double currentDBVersion = 1.00;
-  //static String baseUrl = 'http://10.0.2.2:3000';
-  static String baseUrl = 'http://192.168.1.78:3000';
+  static String baseUrl = 'http://10.0.2.2:3000';
+  //static String baseUrl = 'http://192.168.1.78:3000';
   //static String baseUrl = 'https://api.synapserx.com';
   //static String baseUrl = 'https://apitest.synapserx.com';
   static String temporaryDirectory = '';

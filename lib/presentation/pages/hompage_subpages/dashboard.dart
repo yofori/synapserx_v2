@@ -1,15 +1,17 @@
-import 'dart:io';
+import 'dart:async';
+import 'dart:developer';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:synapserx_v2/data/repository/provider.dart';
 import 'package:synapserx_v2/domain/models/user_info.dart';
 import 'package:synapserx_v2/domain/usecases/provider.dart';
 import 'package:synapserx_v2/presentation/pages/transactions/last_10_transactions_widget.dart';
 import 'package:synapserx_v2/presentation/pages/user/myprofile.dart';
+import 'package:synapserx_v2/presentation/pages/widgets/imagecarousel_widget.dart';
 import 'package:synapserx_v2/presentation/view_model/user/user_provider.dart';
 import '../../../common/service.dart';
 import '../../../domain/models/adimages.dart';
@@ -18,15 +20,9 @@ import '../prescription/getprescription_page.dart';
 import '../prescription/selectpx_page.dart';
 import '../user/useraccounts.dart';
 import '../widgets/custom_synapse_button.dart';
-import '../widgets/loadingindicator.dart';
 import '../widgets/offlineindicator.dart';
 import '../widgets/rxdrawer.dart';
-import '../widgets/snackbar.dart';
 import '../widgets/synapsedrawerbutton.dart' as dwb;
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class HomeDashboardPage extends ConsumerStatefulWidget {
   const HomeDashboardPage({super.key});
@@ -36,14 +32,12 @@ class HomeDashboardPage extends ConsumerStatefulWidget {
 }
 
 class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
-  GlobalKey<ScaffoldState> _skey = GlobalKey();
+  final GlobalKey<ScaffoldState> _skey = GlobalKey();
   late UserProfile userProfile;
   String fullname = '';
   String mdcregno = '';
   List<ADImages> adimagesList = [];
   int currentIndex = 0;
-  static final customCacheManager = CacheManager(
-      Config('customeCacheKey', stalePeriod: const Duration(hours: 24)));
   String greeting() {
     var hour = DateTime.now().hour;
     if (hour < 12) {
@@ -64,39 +58,18 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
 
   Future<void> getAdImages() async {
     adimagesList = await ref.watch(systemDataProvider).getADImages();
+    log('retrieved ad images');
     setState(() {});
   }
 
   Future<void> getUserDetails() async {
-    const storage = FlutterSecureStorage();
     try {
       await ref
           .read(userDataProvider)
           .fetchUserProfile()
           .then((userInfo) async => {
-                await storage.write(
-                    key: 'fullname',
-                    value: '${userInfo.firstname} ${userInfo.surname}'),
-                await storage.write(
-                    key: 'firstname', value: userInfo.firstname.toString()),
-                await storage.write(
-                    key: 'surname', value: userInfo.surname.toString()),
-                await storage.write(
-                    key: 'mdcregno',
-                    value: userInfo.prescriberMDCRegNo.toString()),
-                await storage.write(
-                    key: 'prescriberuid', value: userInfo.id.toString()),
-                await storage.write(
-                    key: 'title', value: userInfo.title.toString()),
+                await ref.read(settingsProvider).setUserInfoToStorage(userInfo),
               });
-
-      //now make entries to Global Data As well for quick retrieval
-      GlobalData.firstname = getData('firstname').toString();
-      GlobalData.surname = getData('surname').toString();
-      GlobalData.prescriberid = getData('prescriberuid').toString();
-      GlobalData.fullname =
-          '${getData('title').toString()} ${getData('firstname').toString()} ${getData('surname').toString()}';
-      GlobalData.mdcregno = getData('mdcregno').toString();
     } catch (err) {
       if (mounted) {
         showDialog(
@@ -129,16 +102,13 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
     }
   }
 
-  late CarouselSliderController _sliderController;
-
   @override
   void initState() {
-    if (GlobalData.isOnline == true) {
-      getAdImages();
-    }
+    //if (GlobalData.isOnline == true) {
+    //getAdImages();
+    //}
     getUserDetails();
     super.initState();
-    _sliderController = CarouselSliderController();
   }
 
   @override
@@ -278,82 +248,6 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                       ],
                     ),
                   ),
-                  adimagesList.isEmpty
-                      ? Container()
-                      : Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                              child: AutoSizeText(
-                                'News/Articles/Updates',
-                                maxLines: 1,
-                                minFontSize: 12,
-                                maxFontSize: 30,
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                              child: SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  child: CarouselSlider(
-                                    unlimitedMode: true,
-                                    controller: _sliderController,
-                                    slideTransform: const DefaultTransform(),
-                                    slideIndicator: CircularSlideIndicator(
-                                      indicatorBorderWidth: 2,
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      indicatorBorderColor: Colors.black,
-                                    ),
-                                    initialPage: 0,
-                                    enableAutoSlider: true,
-                                    children: adimagesList
-                                        .map((item) => GestureDetector(
-                                            onTap: () async {
-                                              Uri url = Uri.parse(item.url!);
-                                              _launchUrl(url);
-                                            },
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: CachedNetworkImage(
-                                                cacheManager:
-                                                    customCacheManager,
-                                                key: UniqueKey(),
-                                                imageUrl:
-                                                    item.urlToImage.toString(),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const Icon(Icons.error),
-                                                fit: BoxFit.fill,
-                                                width: double.infinity,
-                                                progressIndicatorBuilder:
-                                                    (context, url,
-                                                            downloadProgress) =>
-                                                        Center(
-                                                  child: Platform.isAndroid
-                                                      ? const LinearProgressIndicator(
-                                                          minHeight: 10,
-                                                          semanticsLabel:
-                                                              'Fetching news item',
-                                                        )
-                                                      : const CupertinoActivityIndicator(),
-                                                ),
-                                              ),
-                                            )))
-                                        .toList(),
-                                  )),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            )
-                          ],
-                        ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Card(
@@ -369,6 +263,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                           ]),
                     ),
                   ),
+                  ImageCarouselWidget(),
                 ]),
           ]),
         ));
@@ -556,67 +451,5 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
             ),
           );
         });
-  }
-
-  // getPrescription(String prescriptionId) async {
-  //   try {
-  //     LoadingIndicatorDialog().show(context, 'Getting Prescprition ...');
-  //     // Prescription? prescription =
-  //     //     await _dioClient.getPrescription(prescriptionId);
-  //     LoadingIndicatorDialog().dismiss();
-  //     if (!mounted) return;
-  //     Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => const DisplayPrescriptionPage(prescriberId: prescriberId,
-  //                 // prescriptionid: prescriptionId,
-  //                 // prescription: prescription,
-  //                 )));
-  //   } catch (err) {
-  //     LoadingIndicatorDialog().dismiss();
-  //     if (context.mounted) {
-  //       CustomSnackBar.showErrorSnackBar(
-  //           context, 'Could not retrieve prescription: ${err.toString()}');
-  //     }
-  //   }
-  // }
-
-  getLabRequest(String labrequestid) async {
-    try {
-      LoadingIndicatorDialog().show(context, 'Fetching Lab Request ...');
-      //LabRequest? labrequest = await _dioClient.getLabRequest(labrequestid);
-      LoadingIndicatorDialog().dismiss();
-      // if (labrequest != null) {
-      //   // LoadingIndicatorDialog().dismiss();
-      //   if (!mounted) return;
-      //   await Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (context) => DisplayLabRequestPage(
-      //               // labrequestid: labrequestid,
-      //               // labrequest: labrequest,
-      //               )));
-      // }
-    } catch (err) {
-      LoadingIndicatorDialog().dismiss();
-      if (context.mounted) {
-        CustomSnackBar.showErrorSnackBar(context,
-            message: 'Error: ${err.toString()}');
-      }
-    }
-  }
-
-  Future<void> _launchUrl(url) async {
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
-    }
-  }
-
-  Future<void> _refresh() async {
-    if (mounted) {
-      _skey = GlobalKey();
-      setState(() {});
-    }
-    Future.value(null);
   }
 }

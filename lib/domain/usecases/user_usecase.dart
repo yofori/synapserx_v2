@@ -5,6 +5,8 @@ import 'package:synapserx_v2/domain/repository/user_repository.dart';
 abstract class UserUseCase {
   Future<void> registerUser(User user);
   Future<UserInfo> fetchUserProfile();
+  Future<UserInfo> updateUserProfile();
+  Future<UserInfo> createUserProfile(UserInfo userInfo);
 }
 
 class UserUseCaseImpl extends UserUseCase {

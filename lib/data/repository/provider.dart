@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:synapserx_v2/data/repository/prescriptions_repository_implementation.dart';
+import 'package:synapserx_v2/data/repository/settings_repository_implementation.dart';
 import 'package:synapserx_v2/data/repository/system_repository_implementation.dart';
 import 'package:synapserx_v2/data/repository/user_repository_implementation.dart';
 import 'package:synapserx_v2/domain/repository/system_repository.dart';
@@ -22,4 +23,8 @@ final getTransactionsProvider = Provider<TransactionsRepository>((ref) {
 
 final getPrescriptionProvider = Provider<PrescriptionRepositoryImpl>((ref) {
   return PrescriptionRepositoryImpl();
+});
+
+final settingsProvider = Provider<SettingsRepositoryImpl>((ref) {
+  return SettingsRepositoryImpl();
 });

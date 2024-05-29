@@ -347,7 +347,8 @@ class __$$UserInfoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$UserInfoImpl implements _UserInfo {
   _$UserInfoImpl(
       {@JsonKey(name: '_id') this.id,
