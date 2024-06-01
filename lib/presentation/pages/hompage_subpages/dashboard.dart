@@ -88,8 +88,8 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (ctx) => ProfilePage(
-                                  user: UserInfo(),
+                            builder: (ctx) => const ProfilePage(
+                                  updatingUser: false,
                                 )),
                         ModalRoute.withName('/'));
                   },

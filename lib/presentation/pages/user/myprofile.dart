@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:country_code_picker/country_code_picker.dart';
@@ -16,12 +15,14 @@ import 'package:synapserx_v2/presentation/pages/widgets/snackbar.dart';
 
 import '../widgets/loadingindicator.dart';
 
+final hasProfileChangedProvider = StateProvider<bool>((ref) => false);
+
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({
     super.key,
-    required this.user,
+    required this.updatingUser,
   });
-  final UserInfo user;
+  final bool updatingUser;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -35,6 +36,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController telephoneController = TextEditingController();
   TextEditingController specialtyController = TextEditingController();
+  TextEditingController countryCodeController = TextEditingController();
   final ScrollController controllerOne = ScrollController();
   bool replacingSignature = false;
   SignatureController signatureController =
@@ -44,7 +46,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   bool isSignaturePresent = false;
   bool isSignaturechanged = false;
   bool hasProfileChanged = false;
-  String countryCode = '';
+  String countryCode = '+233';
 
   String? dropdownvalue = 'Dr';
   var items = [
@@ -55,7 +57,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     'Ms',
   ];
 
-  List<String> specialty = [];
+  List<String>? specialty = [];
 
   List<String> listOfSpecialties = [
     'Internal Medicine',
@@ -77,7 +79,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   void initState() {
-    getUserInfo();
     super.initState();
   }
 
@@ -88,6 +89,25 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(settingsProvider).getUserInfoFromStorage().then((userInfo) => {
+          firstnameController.text = userInfo?.firstname ?? '',
+          surnameController.text = userInfo?.surname ?? '',
+          telephoneController.text = userInfo?.telephoneNo ?? '',
+          mdcRegController.text = userInfo?.email ?? '',
+          dropdownvalue = userInfo?.title,
+          setState(() {
+            countryCode = userInfo?.countryCode ?? '+233';
+          }),
+          if (userInfo?.specialty != null)
+            {
+              specialty = userInfo?.specialty as List<String>,
+            },
+          if (userInfo?.signature != null)
+            {
+              signatureImage = base64Decode(userInfo?.signature!),
+              isSignaturePresent = true,
+            }
+        });
     return Scaffold(
         bottomNavigationBar: Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 8),
@@ -233,8 +253,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           prefixIcon: CountryCodePicker(
                             showDropDownButton: true,
                             favorite: const ['GH', 'GB', 'US', 'NG', '+27'],
-                            initialSelection:
-                                countryCode == '+44' ? 'GB' : countryCode,
+                            initialSelection: countryCode,
                             onChanged: (value) => _onCountryChange(value),
                           ),
                           border: const OutlineInputBorder(),
@@ -282,7 +301,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         child: SingleChildScrollView(
                           controller: controllerOne,
                           child: ChipsChoice<String>.multiple(
-                            value: specialty,
+                            value: specialty ?? [],
                             onChanged: (val) => setState(() {
                               specialty = val;
                               hasProfileChanged = true;
@@ -398,24 +417,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
               )),
         ));
-  }
-
-  getUserInfo() async {
-    setState(() {
-      firstnameController.text = widget.user.firstname ?? '';
-      surnameController.text = widget.user.surname ?? '';
-      telephoneController.text = widget.user.telephoneNo ?? '';
-      mdcRegController.text = widget.user.email ?? '';
-      dropdownvalue = widget.user.title;
-      countryCode = widget.user.countryCode ?? "+233";
-      if (widget.user.specialty != null) {
-        specialty = widget.user.specialty!;
-      }
-      if (widget.user.signature != null) {
-        signatureImage = base64Decode(widget.user.signature!);
-        isSignaturePresent = true;
-      }
-    });
   }
 
   Future<void> updateUserInfo() async {

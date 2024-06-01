@@ -35,7 +35,7 @@ mixin _$UserInfo {
   String? get firstname => throw _privateConstructorUsedError;
   String? get countryCode => throw _privateConstructorUsedError;
   String? get telephoneNo => throw _privateConstructorUsedError;
-  dynamic get specialty => throw _privateConstructorUsedError;
+  List<String>? get specialty => throw _privateConstructorUsedError;
   dynamic get signature => throw _privateConstructorUsedError;
   DateTime? get lastLogin => throw _privateConstructorUsedError;
   List<dynamic>? get prescriberInstitutions =>
@@ -70,7 +70,7 @@ abstract class $UserInfoCopyWith<$Res> {
       String? firstname,
       String? countryCode,
       String? telephoneNo,
-      dynamic specialty,
+      List<String>? specialty,
       dynamic signature,
       DateTime? lastLogin,
       List<dynamic>? prescriberInstitutions,
@@ -169,7 +169,7 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
       specialty: freezed == specialty
           ? _value.specialty
           : specialty // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<String>?,
       signature: freezed == signature
           ? _value.signature
           : signature // ignore: cast_nullable_to_non_nullable
@@ -220,7 +220,7 @@ abstract class _$$UserInfoImplCopyWith<$Res>
       String? firstname,
       String? countryCode,
       String? telephoneNo,
-      dynamic specialty,
+      List<String>? specialty,
       dynamic signature,
       DateTime? lastLogin,
       List<dynamic>? prescriberInstitutions,
@@ -315,9 +315,9 @@ class __$$UserInfoImplCopyWithImpl<$Res>
           : telephoneNo // ignore: cast_nullable_to_non_nullable
               as String?,
       specialty: freezed == specialty
-          ? _value.specialty
+          ? _value._specialty
           : specialty // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<String>?,
       signature: freezed == signature
           ? _value.signature
           : signature // ignore: cast_nullable_to_non_nullable
@@ -364,14 +364,15 @@ class _$UserInfoImpl implements _UserInfo {
       this.firstname,
       this.countryCode,
       this.telephoneNo,
-      this.specialty,
+      final List<String>? specialty,
       this.signature,
       this.lastLogin,
       final List<dynamic>? prescriberInstitutions,
       this.createdAt,
       this.updatedAt,
       @JsonKey(name: '__v') this.v})
-      : _prescriberInstitutions = prescriberInstitutions;
+      : _specialty = specialty,
+        _prescriberInstitutions = prescriberInstitutions;
 
   factory _$UserInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserInfoImplFromJson(json);
@@ -404,8 +405,16 @@ class _$UserInfoImpl implements _UserInfo {
   final String? countryCode;
   @override
   final String? telephoneNo;
+  final List<String>? _specialty;
   @override
-  final dynamic specialty;
+  List<String>? get specialty {
+    final value = _specialty;
+    if (value == null) return null;
+    if (_specialty is EqualUnmodifiableListView) return _specialty;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final dynamic signature;
   @override
@@ -459,7 +468,8 @@ class _$UserInfoImpl implements _UserInfo {
                 other.countryCode == countryCode) &&
             (identical(other.telephoneNo, telephoneNo) ||
                 other.telephoneNo == telephoneNo) &&
-            const DeepCollectionEquality().equals(other.specialty, specialty) &&
+            const DeepCollectionEquality()
+                .equals(other._specialty, _specialty) &&
             const DeepCollectionEquality().equals(other.signature, signature) &&
             (identical(other.lastLogin, lastLogin) ||
                 other.lastLogin == lastLogin) &&
@@ -489,7 +499,7 @@ class _$UserInfoImpl implements _UserInfo {
         firstname,
         countryCode,
         telephoneNo,
-        const DeepCollectionEquality().hash(specialty),
+        const DeepCollectionEquality().hash(_specialty),
         const DeepCollectionEquality().hash(signature),
         lastLogin,
         const DeepCollectionEquality().hash(_prescriberInstitutions),
@@ -527,7 +537,7 @@ abstract class _UserInfo implements UserInfo {
       final String? firstname,
       final String? countryCode,
       final String? telephoneNo,
-      final dynamic specialty,
+      final List<String>? specialty,
       final dynamic signature,
       final DateTime? lastLogin,
       final List<dynamic>? prescriberInstitutions,
@@ -567,7 +577,7 @@ abstract class _UserInfo implements UserInfo {
   @override
   String? get telephoneNo;
   @override
-  dynamic get specialty;
+  List<String>? get specialty;
   @override
   dynamic get signature;
   @override

@@ -20,7 +20,7 @@ class UserInfo with _$UserInfo {
     String? firstname,
     String? countryCode,
     String? telephoneNo,
-    dynamic specialty,
+    List<String>? specialty,
     dynamic signature,
     DateTime? lastLogin,
     List<dynamic>? prescriberInstitutions,

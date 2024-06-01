@@ -21,7 +21,9 @@ _$UserInfoImpl _$$UserInfoImplFromJson(Map<String, dynamic> json) =>
       firstname: json['firstname'] as String?,
       countryCode: json['countryCode'] as String?,
       telephoneNo: json['telephoneNo'] as String?,
-      specialty: json['specialty'],
+      specialty: (json['specialty'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       signature: json['signature'],
       lastLogin: json['lastLogin'] == null
           ? null

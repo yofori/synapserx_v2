@@ -2,13 +2,10 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:synapserx_v2/domain/models/user_info.dart';
-import 'package:synapserx_v2/presentation/pages/widgets/snackbar.dart';
 import '../../../common/service.dart';
 import '../../../common/sqlite_service.dart';
 import '../../../main.dart';
 import '../../../providers/auth_provider.dart';
-import '../../view_model/user/user_provider.dart';
 import '../user/change_password.dart';
 import '../user/myprofile.dart';
 import '../user/useraccounts.dart';
@@ -155,26 +152,14 @@ class RxDrawer extends ConsumerWidget {
               dense: true,
               leading: const Icon(Icons.person),
               title: const Text('My Profile'),
-              onTap: () async {
+              onTap: () {
                 Navigator.pop(context);
-                try {
-                  LoadingIndicatorDialog()
-                      .show(context, 'Retrieving your profile');
-                  UserInfo? userProfile =
-                      await ref.watch(userProfileProvider.notifier).fetchUser();
-                  LoadingIndicatorDialog().dismiss();
-                  await Navigator.push(
-                      navigatorKey.currentContext!,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(
-                                user: userProfile,
-                              )));
-                } on Exception catch (e) {
-                  LoadingIndicatorDialog().dismiss();
-                  if (context.mounted) {
-                    CustomSnackBar.showErrorSnackBar(context, message: '$e');
-                  }
-                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage(
+                              updatingUser: true,
+                            )));
               }),
           ListTile(
               dense: true,
