@@ -7,13 +7,13 @@ part 'user_info.g.dart';
 class UserInfo with _$UserInfo {
   @JsonSerializable(explicitToJson: true)
   factory UserInfo({
-    @JsonKey(name: '_id') String? id,
-    String? username,
-    String? password,
+    //@JsonKey(name: '_id') String? id,
+    // String? username,
+    // String? password,
     String? email,
-    String? role,
-    String? status,
-    String? confirmationCode,
+    //String? role,
+    //String? status,
+    // String? confirmationCode,
     @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMDCRegNo,
     String? title,
     String? surname,
@@ -22,11 +22,11 @@ class UserInfo with _$UserInfo {
     String? telephoneNo,
     List<String>? specialty,
     dynamic signature,
-    DateTime? lastLogin,
+    //DateTime? lastLogin,
     List<dynamic>? prescriberInstitutions,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    @JsonKey(name: '__v') int? v,
+    // DateTime? createdAt,
+    // DateTime? updatedAt,
+    // @JsonKey(name: '__v') int? v,
   }) = _UserInfo;
 
   factory UserInfo.fromJson(Map<String, dynamic> json) =>

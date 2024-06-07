@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:synapserx_v2/data/repository/provider.dart';
+import 'package:synapserx_v2/domain/models/user_info.dart';
 import '../../../common/service.dart';
 import '../../../common/sqlite_service.dart';
 import '../../../main.dart';
@@ -26,10 +30,13 @@ class RxDrawer extends ConsumerWidget {
   String getInitials(fullname) {
     List<String> names = fullname.split(" ");
     String initials = "";
-    int numWords = 2;
+    int maxNumWords = 3;
+    int numWords = 0;
 
-    if (numWords < names.length) {
+    if (names.length <= maxNumWords) {
       numWords = names.length;
+    } else {
+      numWords = maxNumWords;
     }
     for (var i = 0; i < numWords; i++) {
       initials += names[i][0];
@@ -53,8 +60,10 @@ class RxDrawer extends ConsumerWidget {
               child: Column(
                 children: [
                   FutureBuilder(
-                      future: getData('fullname'),
-                      builder: (context, AsyncSnapshot<String?> snapshot) {
+                      future: ref
+                          .read(settingsProvider)
+                          .getUserInfoFromStorage(), //getData('fullname'),
+                      builder: (context, AsyncSnapshot<UserInfo?> snapshot) {
                         if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         }
@@ -65,7 +74,8 @@ class RxDrawer extends ConsumerWidget {
                             child: CircleAvatar(
                                 maxRadius: 27,
                                 child: Text(
-                                  getInitials('${snapshot.data}'),
+                                  getInitials(
+                                      '${snapshot.data?.firstname} ${snapshot.data?.surname}'),
                                   style: const TextStyle(fontSize: 20),
                                 )),
                           );
@@ -83,35 +93,33 @@ class RxDrawer extends ConsumerWidget {
                       }),
                   const SizedBox(height: 10),
                   FutureBuilder(
-                      future: getData('fullname'),
-                      builder: (context, AsyncSnapshot<String?> snapshot) {
+                      future: ref
+                          .read(settingsProvider)
+                          .getUserInfoFromStorage(), //getData('fullname'),
+                      builder: (context, AsyncSnapshot<UserInfo?> snapshot) {
                         if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         }
                         if (snapshot.hasData) {
-                          return Text(
-                            '${snapshot.data}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04),
-                          );
-                        }
-                        return Text(auth.currentUser!.displayName.toString());
-                      }),
-                  FutureBuilder(
-                      future: getData('mdcregno'),
-                      builder: (context, AsyncSnapshot<String?> snapshot) {
-                        if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-                        if (snapshot.hasData) {
-                          return Text(
-                            '${snapshot.data}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04),
+                          return Column(
+                            children: [
+                              Text(
+                                '${snapshot.data?.title} ${snapshot.data?.firstname} ${snapshot.data?.surname}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
+                              ),
+                              Text(
+                                '${snapshot.data?.prescriberMDCRegNo}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
+                              ),
+                            ],
                           );
                         }
                         return const Text('');

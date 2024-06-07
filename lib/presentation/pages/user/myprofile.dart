@@ -4,18 +4,17 @@ import 'dart:typed_data';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:chips_choice/chips_choice.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:signature/signature.dart';
 import 'package:synapserx_v2/common/auth_service.dart';
-import 'package:synapserx_v2/common/service.dart';
 import 'package:synapserx_v2/data/repository/provider.dart';
 import 'package:synapserx_v2/domain/models/user_info.dart';
-import 'package:synapserx_v2/main.dart';
 import 'package:synapserx_v2/presentation/pages/widgets/snackbar.dart';
 
 import '../widgets/loadingindicator.dart';
 
 final hasProfileChangedProvider = StateProvider<bool>((ref) => false);
+final replacingSignatureProvider = StateProvider<bool>((ref) => false);
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({
@@ -25,18 +24,17 @@ class ProfilePage extends ConsumerStatefulWidget {
   final bool updatingUser;
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ProfilePageState createState() => _ProfilePageState();
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController mdcRegController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
   TextEditingController firstnameController = TextEditingController();
   TextEditingController telephoneController = TextEditingController();
   TextEditingController specialtyController = TextEditingController();
-  TextEditingController countryCodeController = TextEditingController();
   final ScrollController controllerOne = ScrollController();
   bool replacingSignature = false;
   SignatureController signatureController =
@@ -46,7 +44,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   bool isSignaturePresent = false;
   bool isSignaturechanged = false;
   bool hasProfileChanged = false;
-  String countryCode = '+233';
+  String countryCode = '';
 
   String? dropdownvalue = 'Dr';
   var items = [
@@ -57,7 +55,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     'Ms',
   ];
 
-  List<String>? specialty = [];
+  List<String> specialty = [];
 
   List<String> listOfSpecialties = [
     'Internal Medicine',
@@ -79,6 +77,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   void initState() {
+    getUserInfo();
     super.initState();
   }
 
@@ -89,84 +88,73 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(settingsProvider).getUserInfoFromStorage().then((userInfo) => {
-          firstnameController.text = userInfo?.firstname ?? '',
-          surnameController.text = userInfo?.surname ?? '',
-          telephoneController.text = userInfo?.telephoneNo ?? '',
-          mdcRegController.text = userInfo?.email ?? '',
-          dropdownvalue = userInfo?.title,
-          setState(() {
-            countryCode = userInfo?.countryCode ?? '+233';
-          }),
-          if (userInfo?.specialty != null)
-            {
-              specialty = userInfo?.specialty as List<String>,
-            },
-          if (userInfo?.signature != null)
-            {
-              signatureImage = base64Decode(userInfo?.signature!),
-              isSignaturePresent = true,
-            }
-        });
     return Scaffold(
         bottomNavigationBar: Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent),
-                    onPressed: hasProfileChanged
-                        ? (() {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Confirmation"),
-                                  content: const Text(
-                                      "Do you want to exit updating your profile without saving the changes "),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text("Yes"),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(); // pop first time to close the dialog
-                                        Navigator.of(context)
-                                            .pop(); // pop again to return to the previous screen
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: const Text("No"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
+            child: Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final edittingEnable = ref.watch(hasProfileChangedProvider);
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent),
+                        onPressed: edittingEnable
+                            ? (() {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Confirmation"),
+                                      content: const Text(
+                                          "Do you want to exit updating your profile without saving the changes "),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text("Yes"),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // pop first time to close the dialog
+                                            Navigator.of(context)
+                                                .pop(); // pop again to return to the previous screen
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text("No"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          })
-                        : null,
-                    child: const Text('Cancel')),
-                const SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                    onPressed: hasProfileChanged
-                        ? () async {
-                            if (_formKey.currentState!.validate()) {
-                              await createUserInfo();
-                              // Navigator.pop(context);
-                            }
-                          }
-                        : null,
-                    child: const Text('Save')),
-              ],
+                              })
+                            : null,
+                        child: const Text('Cancel')),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green),
+                        onPressed: edittingEnable
+                            ? () async {
+                                if (_formKey.currentState!.validate()) {
+                                  if (!widget.updatingUser) {
+                                    await createUserInfo();
+                                  } else {
+                                    updateUserInfo();
+                                  }
+                                }
+                              }
+                            : null,
+                        child: const Text('Save')),
+                  ],
+                );
+              },
             )),
-        appBar: AppBar(title: (const Text('Update User Profile'))),
+        appBar: AppBar(title: (const Text('Update my profile'))),
         body: SingleChildScrollView(
           child: Form(
               key: _formKey,
@@ -190,19 +178,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             value: items, child: Text(items));
                       }).toList(),
                       onChanged: (newValue) {
-                        setState(() {
-                          hasProfileChanged = true;
-                          dropdownvalue = newValue.toString();
-                        });
+                        ref.read(hasProfileChangedProvider.notifier).state =
+                            true;
+                        dropdownvalue = newValue.toString();
                       },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     TextFormField(
-                      onChanged: (value) => setState(() {
-                        hasProfileChanged = true;
-                      }),
+                      onChanged: (value) => {
+                        ref.read(hasProfileChangedProvider.notifier).state =
+                            true
+                      },
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -214,9 +202,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       height: 20,
                     ),
                     TextFormField(
-                      onChanged: (value) => setState(() {
-                        hasProfileChanged = true;
-                      }),
+                      onChanged: (value) => ref
+                          .read(hasProfileChangedProvider.notifier)
+                          .state = true,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -227,9 +215,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     const SizedBox(height: 20.0),
                     TextFormField(
                       textCapitalization: TextCapitalization.characters,
-                      onChanged: (value) => setState(() {
-                        hasProfileChanged = true;
-                      }),
+                      onChanged: (value) => ref
+                          .read(hasProfileChangedProvider.notifier)
+                          .state = true,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'MDC Reg No',
@@ -246,14 +234,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ),
                     const SizedBox(height: 20.0),
                     TextFormField(
-                      onChanged: (value) => setState(() {
-                        hasProfileChanged = true;
-                      }),
+                      onChanged: (value) => ref
+                          .read(hasProfileChangedProvider.notifier)
+                          .state = true,
                       decoration: InputDecoration(
                           prefixIcon: CountryCodePicker(
                             showDropDownButton: true,
                             favorite: const ['GH', 'GB', 'US', 'NG', '+27'],
-                            initialSelection: countryCode,
+                            initialSelection:
+                                countryCode == '+44' ? 'GB' : countryCode,
                             onChanged: (value) => _onCountryChange(value),
                           ),
                           border: const OutlineInputBorder(),
@@ -301,10 +290,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         child: SingleChildScrollView(
                           controller: controllerOne,
                           child: ChipsChoice<String>.multiple(
-                            value: specialty ?? [],
+                            value: specialty,
                             onChanged: (val) => setState(() {
                               specialty = val;
-                              hasProfileChanged = true;
+                              ref
+                                  .read(hasProfileChangedProvider.notifier)
+                                  .state = true;
                             }),
                             choiceItems: C2Choice.listFrom<String, String>(
                               source: listOfSpecialties,
@@ -358,9 +349,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     // ),
                     Row(
                       children: [
-                        TextButton(
-                            onPressed: replacingSignature ? null : () {},
-                            child: const Text('Remove')),
+                        // TextButton(
+                        //     onPressed: replacingSignature ? null : () {},
+                        //     child: const Text('Remove')),
                         TextButton(
                             onPressed: replacingSignature
                                 ? null
@@ -395,7 +386,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                         }
                                         setState(() {
                                           replacingSignature = false;
-                                          hasProfileChanged = true;
+                                          ref
+                                              .read(hasProfileChangedProvider
+                                                  .notifier)
+                                              .state = true;
                                         });
                                       }
                                     : null,
@@ -419,39 +413,57 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         ));
   }
 
+  getUserInfo() async {
+    await ref
+        .read(settingsProvider)
+        .getUserInfoFromStorage()
+        .then((userInfo) => {
+              firstnameController.text = userInfo?.firstname ?? '',
+              surnameController.text = userInfo?.surname ?? '',
+              telephoneController.text = userInfo?.telephoneNo ?? '',
+              mdcRegController.text = userInfo?.prescriberMDCRegNo ?? '',
+              dropdownvalue = userInfo?.title,
+              countryCode = userInfo?.countryCode ?? '+233',
+              if (userInfo?.specialty != null)
+                {
+                  specialty = userInfo?.specialty as List<String>,
+                },
+              if (userInfo?.signature != null)
+                {
+                  signatureImage = base64Decode(userInfo?.signature!),
+                  isSignaturePresent = true,
+                }
+            });
+    setState(() {});
+  }
+
   Future<void> updateUserInfo() async {
-    var params = {
-      "firstname": firstnameController.text,
-      "surname": surnameController.text,
-      "telephoneNo": telephoneController.text,
-      "prescriberMDCRegNo": mdcRegController.text,
-      "countryCode": countryCode,
-      "title": dropdownvalue,
-      "specialty": specialty,
-    };
-    if (isSignaturechanged) {
-      final newsignature = base64.encode(signatureImage as List<int>);
-      params.addEntries({"signature": newsignature}.entries);
-    }
+    UserInfo userInfo = UserInfo(
+        firstname: firstnameController.text,
+        surname: surnameController.text,
+        telephoneNo: telephoneController.text,
+        prescriberMDCRegNo: mdcRegController.text,
+        countryCode: countryCode,
+        title: dropdownvalue,
+        specialty: specialty,
+        signature: isSignaturechanged
+            ? base64.encode(signatureImage as List<int>)
+            : null);
 
     try {
       LoadingIndicatorDialog().show(context, 'Updating your user profile ...');
 
+      await ref.read(userProfileProvider).updateUserProfile(userInfo).then(
+          (_) => {ref.read(settingsProvider).setUserInfoToStorage(userInfo)});
+      ref.read(hasProfileChangedProvider.notifier).state = false;
+
       LoadingIndicatorDialog().dismiss();
-      scaffoldMessengerKey.currentState!.showSnackBar(const SnackBar(
-        content: Text('Your profile has been successfully updated'),
-        backgroundColor: Colors.green,
-      ));
-      if (isSignaturechanged) {
-        GlobalData.signature = base64.encode(signatureImage as List<int>);
-      }
+      CustomSnackBar.showSuccessSnackBar(context,
+          message: 'Your profile has been successfully updated');
       if (context.mounted) Navigator.of(context).pop();
     } catch (e) {
       LoadingIndicatorDialog().dismiss();
-      scaffoldMessengerKey.currentState!.showSnackBar(SnackBar(
-        content: Text('Error updating your user info: $e'),
-        backgroundColor: Colors.red,
-      ));
+      CustomSnackBar.showErrorSnackBar(context, message: '$e');
     }
   }
 
@@ -476,9 +488,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       LoadingIndicatorDialog().dismiss();
       CustomSnackBar.showSuccessSnackBar(context,
           message: 'Your profile has been successfully createdd');
-      if (isSignaturechanged) {
-        GlobalData.signature = base64.encode(signatureImage as List<int>);
-      }
+      // if (isSignaturechanged) {
+      //   GlobalData.signature = base64.encode(signatureImage as List<int>);
+      // }
       if (context.mounted) {
         Navigator.of(context).pop();
       }
@@ -490,7 +502,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   void _onCountryChange(CountryCode countryCodeSelected) {
     setState(() {
-      hasProfileChanged = true;
+      ref.read(hasProfileChangedProvider.notifier).state = true;
       countryCode = countryCodeSelected.dialCode.toString();
     });
   }

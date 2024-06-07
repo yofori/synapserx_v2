@@ -33,11 +33,10 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<UserInfo> updateUserProfile() async {
+  Future<UserInfo> updateUserProfile(UserInfo userInfo) async {
     try {
-      final response = await DioClient.instance.put(
-        '/user/updateuserinfo',
-      );
+      final response = await DioClient.instance
+          .put('/user/updateuserinfo', data: userInfo.toJson());
       return UserInfo.fromJson(response);
     } on DioException catch (err) {
       final errorMessage = (err).toString();

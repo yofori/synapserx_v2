@@ -20,14 +20,12 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserInfo {
-  @JsonKey(name: '_id')
-  String? get id => throw _privateConstructorUsedError;
-  String? get username => throw _privateConstructorUsedError;
-  String? get password => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError;
-  String? get role => throw _privateConstructorUsedError;
-  String? get status => throw _privateConstructorUsedError;
-  String? get confirmationCode => throw _privateConstructorUsedError;
+//@JsonKey(name: '_id') String? id,
+// String? username,
+// String? password,
+  String? get email => throw _privateConstructorUsedError; //String? role,
+//String? status,
+// String? confirmationCode,
   @JsonKey(name: 'prescriberMDCRegNo')
   String? get prescriberMDCRegNo => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
@@ -36,14 +34,10 @@ mixin _$UserInfo {
   String? get countryCode => throw _privateConstructorUsedError;
   String? get telephoneNo => throw _privateConstructorUsedError;
   List<String>? get specialty => throw _privateConstructorUsedError;
-  dynamic get signature => throw _privateConstructorUsedError;
-  DateTime? get lastLogin => throw _privateConstructorUsedError;
+  dynamic get signature =>
+      throw _privateConstructorUsedError; //DateTime? lastLogin,
   List<dynamic>? get prescriberInstitutions =>
       throw _privateConstructorUsedError;
-  DateTime? get createdAt => throw _privateConstructorUsedError;
-  DateTime? get updatedAt => throw _privateConstructorUsedError;
-  @JsonKey(name: '__v')
-  int? get v => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,13 +51,7 @@ abstract class $UserInfoCopyWith<$Res> {
       _$UserInfoCopyWithImpl<$Res, UserInfo>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String? id,
-      String? username,
-      String? password,
-      String? email,
-      String? role,
-      String? status,
-      String? confirmationCode,
+      {String? email,
       @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMDCRegNo,
       String? title,
       String? surname,
@@ -72,11 +60,7 @@ abstract class $UserInfoCopyWith<$Res> {
       String? telephoneNo,
       List<String>? specialty,
       dynamic signature,
-      DateTime? lastLogin,
-      List<dynamic>? prescriberInstitutions,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      @JsonKey(name: '__v') int? v});
+      List<dynamic>? prescriberInstitutions});
 }
 
 /// @nodoc
@@ -92,13 +76,7 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? username = freezed,
-    Object? password = freezed,
     Object? email = freezed,
-    Object? role = freezed,
-    Object? status = freezed,
-    Object? confirmationCode = freezed,
     Object? prescriberMDCRegNo = freezed,
     Object? title = freezed,
     Object? surname = freezed,
@@ -107,40 +85,12 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
     Object? telephoneNo = freezed,
     Object? specialty = freezed,
     Object? signature = freezed,
-    Object? lastLogin = freezed,
     Object? prescriberInstitutions = freezed,
-    Object? createdAt = freezed,
-    Object? updatedAt = freezed,
-    Object? v = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      username: freezed == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      role: freezed == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String?,
-      confirmationCode: freezed == confirmationCode
-          ? _value.confirmationCode
-          : confirmationCode // ignore: cast_nullable_to_non_nullable
               as String?,
       prescriberMDCRegNo: freezed == prescriberMDCRegNo
           ? _value.prescriberMDCRegNo
@@ -174,26 +124,10 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
           ? _value.signature
           : signature // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      lastLogin: freezed == lastLogin
-          ? _value.lastLogin
-          : lastLogin // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       prescriberInstitutions: freezed == prescriberInstitutions
           ? _value.prescriberInstitutions
           : prescriberInstitutions // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      v: freezed == v
-          ? _value.v
-          : v // ignore: cast_nullable_to_non_nullable
-              as int?,
     ) as $Val);
   }
 }
@@ -207,13 +141,7 @@ abstract class _$$UserInfoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String? id,
-      String? username,
-      String? password,
-      String? email,
-      String? role,
-      String? status,
-      String? confirmationCode,
+      {String? email,
       @JsonKey(name: 'prescriberMDCRegNo') String? prescriberMDCRegNo,
       String? title,
       String? surname,
@@ -222,11 +150,7 @@ abstract class _$$UserInfoImplCopyWith<$Res>
       String? telephoneNo,
       List<String>? specialty,
       dynamic signature,
-      DateTime? lastLogin,
-      List<dynamic>? prescriberInstitutions,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      @JsonKey(name: '__v') int? v});
+      List<dynamic>? prescriberInstitutions});
 }
 
 /// @nodoc
@@ -240,13 +164,7 @@ class __$$UserInfoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? username = freezed,
-    Object? password = freezed,
     Object? email = freezed,
-    Object? role = freezed,
-    Object? status = freezed,
-    Object? confirmationCode = freezed,
     Object? prescriberMDCRegNo = freezed,
     Object? title = freezed,
     Object? surname = freezed,
@@ -255,40 +173,12 @@ class __$$UserInfoImplCopyWithImpl<$Res>
     Object? telephoneNo = freezed,
     Object? specialty = freezed,
     Object? signature = freezed,
-    Object? lastLogin = freezed,
     Object? prescriberInstitutions = freezed,
-    Object? createdAt = freezed,
-    Object? updatedAt = freezed,
-    Object? v = freezed,
   }) {
     return _then(_$UserInfoImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      username: freezed == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      role: freezed == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String?,
-      confirmationCode: freezed == confirmationCode
-          ? _value.confirmationCode
-          : confirmationCode // ignore: cast_nullable_to_non_nullable
               as String?,
       prescriberMDCRegNo: freezed == prescriberMDCRegNo
           ? _value.prescriberMDCRegNo
@@ -322,26 +212,10 @@ class __$$UserInfoImplCopyWithImpl<$Res>
           ? _value.signature
           : signature // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      lastLogin: freezed == lastLogin
-          ? _value.lastLogin
-          : lastLogin // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       prescriberInstitutions: freezed == prescriberInstitutions
           ? _value._prescriberInstitutions
           : prescriberInstitutions // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      v: freezed == v
-          ? _value.v
-          : v // ignore: cast_nullable_to_non_nullable
-              as int?,
     ));
   }
 }
@@ -351,13 +225,7 @@ class __$$UserInfoImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$UserInfoImpl implements _UserInfo {
   _$UserInfoImpl(
-      {@JsonKey(name: '_id') this.id,
-      this.username,
-      this.password,
-      this.email,
-      this.role,
-      this.status,
-      this.confirmationCode,
+      {this.email,
       @JsonKey(name: 'prescriberMDCRegNo') this.prescriberMDCRegNo,
       this.title,
       this.surname,
@@ -366,32 +234,21 @@ class _$UserInfoImpl implements _UserInfo {
       this.telephoneNo,
       final List<String>? specialty,
       this.signature,
-      this.lastLogin,
-      final List<dynamic>? prescriberInstitutions,
-      this.createdAt,
-      this.updatedAt,
-      @JsonKey(name: '__v') this.v})
+      final List<dynamic>? prescriberInstitutions})
       : _specialty = specialty,
         _prescriberInstitutions = prescriberInstitutions;
 
   factory _$UserInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserInfoImplFromJson(json);
 
-  @override
-  @JsonKey(name: '_id')
-  final String? id;
-  @override
-  final String? username;
-  @override
-  final String? password;
+//@JsonKey(name: '_id') String? id,
+// String? username,
+// String? password,
   @override
   final String? email;
-  @override
-  final String? role;
-  @override
-  final String? status;
-  @override
-  final String? confirmationCode;
+//String? role,
+//String? status,
+// String? confirmationCode,
   @override
   @JsonKey(name: 'prescriberMDCRegNo')
   final String? prescriberMDCRegNo;
@@ -417,9 +274,9 @@ class _$UserInfoImpl implements _UserInfo {
 
   @override
   final dynamic signature;
-  @override
-  final DateTime? lastLogin;
+//DateTime? lastLogin,
   final List<dynamic>? _prescriberInstitutions;
+//DateTime? lastLogin,
   @override
   List<dynamic>? get prescriberInstitutions {
     final value = _prescriberInstitutions;
@@ -431,16 +288,8 @@ class _$UserInfoImpl implements _UserInfo {
   }
 
   @override
-  final DateTime? createdAt;
-  @override
-  final DateTime? updatedAt;
-  @override
-  @JsonKey(name: '__v')
-  final int? v;
-
-  @override
   String toString() {
-    return 'UserInfo(id: $id, username: $username, password: $password, email: $email, role: $role, status: $status, confirmationCode: $confirmationCode, prescriberMDCRegNo: $prescriberMDCRegNo, title: $title, surname: $surname, firstname: $firstname, countryCode: $countryCode, telephoneNo: $telephoneNo, specialty: $specialty, signature: $signature, lastLogin: $lastLogin, prescriberInstitutions: $prescriberInstitutions, createdAt: $createdAt, updatedAt: $updatedAt, v: $v)';
+    return 'UserInfo(email: $email, prescriberMDCRegNo: $prescriberMDCRegNo, title: $title, surname: $surname, firstname: $firstname, countryCode: $countryCode, telephoneNo: $telephoneNo, specialty: $specialty, signature: $signature, prescriberInstitutions: $prescriberInstitutions)';
   }
 
   @override
@@ -448,16 +297,7 @@ class _$UserInfoImpl implements _UserInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserInfoImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.password, password) ||
-                other.password == password) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.role, role) || other.role == role) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.confirmationCode, confirmationCode) ||
-                other.confirmationCode == confirmationCode) &&
             (identical(other.prescriberMDCRegNo, prescriberMDCRegNo) ||
                 other.prescriberMDCRegNo == prescriberMDCRegNo) &&
             (identical(other.title, title) || other.title == title) &&
@@ -471,42 +311,24 @@ class _$UserInfoImpl implements _UserInfo {
             const DeepCollectionEquality()
                 .equals(other._specialty, _specialty) &&
             const DeepCollectionEquality().equals(other.signature, signature) &&
-            (identical(other.lastLogin, lastLogin) ||
-                other.lastLogin == lastLogin) &&
             const DeepCollectionEquality().equals(
-                other._prescriberInstitutions, _prescriberInstitutions) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
-            (identical(other.v, v) || other.v == v));
+                other._prescriberInstitutions, _prescriberInstitutions));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hashAll([
-        runtimeType,
-        id,
-        username,
-        password,
-        email,
-        role,
-        status,
-        confirmationCode,
-        prescriberMDCRegNo,
-        title,
-        surname,
-        firstname,
-        countryCode,
-        telephoneNo,
-        const DeepCollectionEquality().hash(_specialty),
-        const DeepCollectionEquality().hash(signature),
-        lastLogin,
-        const DeepCollectionEquality().hash(_prescriberInstitutions),
-        createdAt,
-        updatedAt,
-        v
-      ]);
+  int get hashCode => Object.hash(
+      runtimeType,
+      email,
+      prescriberMDCRegNo,
+      title,
+      surname,
+      firstname,
+      countryCode,
+      telephoneNo,
+      const DeepCollectionEquality().hash(_specialty),
+      const DeepCollectionEquality().hash(signature),
+      const DeepCollectionEquality().hash(_prescriberInstitutions));
 
   @JsonKey(ignore: true)
   @override
@@ -524,13 +346,7 @@ class _$UserInfoImpl implements _UserInfo {
 
 abstract class _UserInfo implements UserInfo {
   factory _UserInfo(
-      {@JsonKey(name: '_id') final String? id,
-      final String? username,
-      final String? password,
-      final String? email,
-      final String? role,
-      final String? status,
-      final String? confirmationCode,
+      {final String? email,
       @JsonKey(name: 'prescriberMDCRegNo') final String? prescriberMDCRegNo,
       final String? title,
       final String? surname,
@@ -539,31 +355,18 @@ abstract class _UserInfo implements UserInfo {
       final String? telephoneNo,
       final List<String>? specialty,
       final dynamic signature,
-      final DateTime? lastLogin,
-      final List<dynamic>? prescriberInstitutions,
-      final DateTime? createdAt,
-      final DateTime? updatedAt,
-      @JsonKey(name: '__v') final int? v}) = _$UserInfoImpl;
+      final List<dynamic>? prescriberInstitutions}) = _$UserInfoImpl;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) =
       _$UserInfoImpl.fromJson;
 
-  @override
-  @JsonKey(name: '_id')
-  String? get id;
-  @override
-  String? get username;
-  @override
-  String? get password;
-  @override
+  @override //@JsonKey(name: '_id') String? id,
+// String? username,
+// String? password,
   String? get email;
-  @override
-  String? get role;
-  @override
-  String? get status;
-  @override
-  String? get confirmationCode;
-  @override
+  @override //String? role,
+//String? status,
+// String? confirmationCode,
   @JsonKey(name: 'prescriberMDCRegNo')
   String? get prescriberMDCRegNo;
   @override
@@ -580,17 +383,8 @@ abstract class _UserInfo implements UserInfo {
   List<String>? get specialty;
   @override
   dynamic get signature;
-  @override
-  DateTime? get lastLogin;
-  @override
+  @override //DateTime? lastLogin,
   List<dynamic>? get prescriberInstitutions;
-  @override
-  DateTime? get createdAt;
-  @override
-  DateTime? get updatedAt;
-  @override
-  @JsonKey(name: '__v')
-  int? get v;
   @override
   @JsonKey(ignore: true)
   _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>

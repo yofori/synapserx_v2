@@ -63,50 +63,53 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
   }
 
   Future<void> getUserDetails() async {
-    try {
-      await ref
-          .read(userDataProvider)
-          .fetchUserProfile()
-          .then((userInfo) async => {
-                await ref.read(settingsProvider).setUserInfoToStorage(userInfo),
-              });
-    } catch (err) {
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text(
-              'User Profile Error!',
-              textAlign: TextAlign.center,
+    final userProfile =
+        await ref.read(settingsProvider).getUserInfoFromStorage();
+    if (userProfile == null) {
+      try {
+        await ref
+            .read(userDataProvider)
+            .fetchUserProfile()
+            .then((userInfo) async => {
+                  await ref
+                      .read(settingsProvider)
+                      .setUserInfoToStorage(userInfo),
+                });
+      } catch (err) {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text(
+                'User Profile Error!',
+                textAlign: TextAlign.center,
+              ),
+              content: Text(
+                  'A user profile for your login credentials does not exist. Please create a user profile to continue using synapseRx $err'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => const ProfilePage(
+                                    updatingUser: false,
+                                  )),
+                          ModalRoute.withName('/'));
+                    },
+                    child: const Text("Create Profile")),
+                TextButton(onPressed: () {}, child: const Text('Cancel'))
+              ],
             ),
-            content: const Text(
-                'A user profile for your login credentials does not exist. Please create a user profile to continue using synapseRx'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(ctx).pop();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (ctx) => const ProfilePage(
-                                  updatingUser: false,
-                                )),
-                        ModalRoute.withName('/'));
-                  },
-                  child: const Text("Create Profile")),
-              TextButton(onPressed: () {}, child: const Text('Cancel'))
-            ],
-          ),
-        );
+          );
+        }
       }
     }
   }
 
   @override
   void initState() {
-    //if (GlobalData.isOnline == true) {
-    //getAdImages();
-    //}
     getUserDetails();
     super.initState();
   }
@@ -153,17 +156,31 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                       height: 5,
                     ),
                     FutureBuilder(
-                        future: getData('fullname'),
-                        builder: (context, AsyncSnapshot<String?> snapshot) {
+                        future: ref
+                            .read(settingsProvider)
+                            .getUserInfoFromStorage(), //getData('fullname'),
+                        builder: (context, AsyncSnapshot<UserInfo?> snapshot) {
                           if (snapshot.hasError) {
                             return Text('${snapshot.error}');
                           }
                           if (snapshot.hasData) {
-                            return Text(
-                              '${snapshot.data}',
-                              style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04),
+                            return Column(
+                              children: [
+                                Text(
+                                  '${snapshot.data?.title} ${snapshot.data?.firstname} ${snapshot.data?.surname}',
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04),
+                                ),
+                                Text(
+                                  '${snapshot.data?.prescriberMDCRegNo}',
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04),
+                                ),
+                              ],
                             );
                           }
                           return const Text('');
@@ -171,22 +188,6 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                     const SizedBox(
                       height: 3,
                     ),
-                    FutureBuilder(
-                        future: getData('mdcregno'),
-                        builder: (context, AsyncSnapshot<String?> snapshot) {
-                          if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-                          if (snapshot.hasData) {
-                            return Text(
-                              '${snapshot.data}',
-                              style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04),
-                            );
-                          }
-                          return const Text('');
-                        }),
                   ],
                 )),
             Column(
