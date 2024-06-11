@@ -178,7 +178,7 @@ class RxDrawer extends ConsumerWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ChangePasswordPage()));
+                        builder: (context) => ChangePasswordPage()));
               }),
           ListTile(
               dense: true,
@@ -198,7 +198,7 @@ class RxDrawer extends ConsumerWidget {
             title: const Text('Sign Out'),
             onTap: () {
               showDialog(
-                  context: navigatorKey.currentContext!,
+                  context: context,
                   builder: (ctx) => AlertDialog(
                         title: const Text('Please confirm'),
                         content:

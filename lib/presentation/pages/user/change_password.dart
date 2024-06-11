@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:synapserx_v2/presentation/pages/widgets/loadingindicator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({super.key});
+class ChangePasswordPage extends StatelessWidget {
+  ChangePasswordPage({super.key});
 
-  @override
-  ChangePasswordPageState createState() => ChangePasswordPageState();
-}
-
-class ChangePasswordPageState extends State<ChangePasswordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmController = TextEditingController();
-  bool connected = false;
-  bool showCurrentPassword = true;
-  bool showNewPassword = true;
-  bool showConfirmPassword = true;
   @override
   Widget build(BuildContext context) {
-    bool changedPassword;
     return Scaffold(
       appBar: AppBar(title: const Text('Change Password')),
       body: Form(
@@ -34,73 +22,8 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text('New Password:'),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: passwordController,
-                  validator: (val) {
-                    // ignore: prefer_is_not_empty
-                    if ((val!.isEmpty) ||
-                        !RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-                            .hasMatch(val)) {
-                      return "Password does not meet the minimum requirements";
-                    }
-                    return null;
-                  },
-                  obscureText: showNewPassword,
-                  decoration: InputDecoration(
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          showNewPassword = !showNewPassword;
-                        });
-                      },
-                      child: Icon(
-                        showNewPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Enter your New Password',
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text('Confirm New Password:'),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  validator: (val) {
-                    if (val != passwordController.text) {
-                      return "Passwords don't match";
-                    }
-                    return null;
-                  },
-                  obscureText: showConfirmPassword,
-                  decoration: InputDecoration(
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          showConfirmPassword = !showConfirmPassword;
-                        });
-                      },
-                      child: Icon(
-                        showConfirmPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Confirm your New Password',
-                  ),
-                ),
+                const PasswordField(),
+                const ConfirmPasswordField(),
                 const SizedBox(
                   height: 20,
                 ),
@@ -108,57 +31,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                     ),
-                    onPressed: () async => {
-                          //await getConnectivity(),
-                          if (!connected)
-                            {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.red.shade300,
-                                  content: const Text(
-                                      'No Internet! Internet access required to change password'),
-                                ),
-                              ),
-                            }
-                          else
-                            {
-                              if (_formKey.currentState!.validate())
-                                {
-                                  LoadingIndicatorDialog()
-                                      .show(context, 'Changing password ...'),
-                                  //changedPassword = await _dioClient
-                                  //.changePassword(passwordController.text),
-                                  LoadingIndicatorDialog().dismiss(),
-                                  // if (changedPassword)
-                                  //   {
-                                  //     {
-                                  //       ScaffoldMessenger.of(context)
-                                  //           .showSnackBar(
-                                  //         SnackBar(
-                                  //           backgroundColor:
-                                  //               Colors.green.shade300,
-                                  //           content: const Text(
-                                  //               'Your password has been changed'),
-                                  //         ),
-                                  //       ),
-                                  //       Navigator.pushReplacementNamed(
-                                  //           context, '/')
-                                  //     }
-                                  //   }
-                                  // else
-                                  //   {
-                                  //     ScaffoldMessenger.of(context)
-                                  //         .showSnackBar(
-                                  //       SnackBar(
-                                  //         backgroundColor: Colors.red.shade300,
-                                  //         content: const Text(
-                                  //             'Password could not be changed'),
-                                  //       ),
-                                  //     ),
-                                  //   }
-                                }
-                            }
-                        },
+                    onPressed: () async => {},
                     child: const Text(
                       'SUBMIT',
                       style: TextStyle(fontSize: 18),
@@ -168,13 +41,86 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
           )),
     );
   }
+}
 
-  Future<void> getConnectivity() async {
-    // var connectivityResult = await (Connectivity().checkConnectivity());
-    // if (connectivityResult != ConnectivityResult.none) {
-    //   connected = true;
-    // } else {
-    //   connected = false;
-    // }
+class PasswordField extends ConsumerWidget {
+  const PasswordField({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPasswordVisible = ref.watch(passwordVisibilityProvider);
+
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: TextFormField(
+        validator: (val) {
+          if ((val!.isEmpty) ||
+              !RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+                  .hasMatch(val)) {
+            return "Password does not meet the minimum requirements";
+          }
+          return null;
+        },
+        obscureText: !isPasswordVisible,
+        decoration: InputDecoration(
+          labelText: 'Enter New Password',
+          border: const OutlineInputBorder(),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            ),
+            onPressed: () {
+              ref.read(passwordVisibilityProvider.notifier).state =
+                  !isPasswordVisible;
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
+
+class ConfirmPasswordField extends ConsumerWidget {
+  const ConfirmPasswordField({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPasswordVisible = ref.watch(passwordVisibilityProvider);
+
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: TextFormField(
+        validator: (val) {
+          if ((val!.isEmpty) ||
+              !RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+                  .hasMatch(val)) {
+            return "Password does not meet the minimum requirements";
+          }
+          return null;
+        },
+        obscureText: !isPasswordVisible,
+        decoration: InputDecoration(
+          labelText: 'Confirm New Password',
+          border: const OutlineInputBorder(),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            ),
+            onPressed: () {
+              ref.read(passwordVisibilityProvider.notifier).state =
+                  !isPasswordVisible;
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final passwordVisibilityProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
+final confirmPasswordVisibilityProvider = StateProvider<bool>((ref) {
+  return false;
+});

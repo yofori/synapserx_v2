@@ -157,7 +157,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                     ),
                     FutureBuilder(
                         future: ref
-                            .read(settingsProvider)
+                            .watch(settingsProvider)
                             .getUserInfoFromStorage(), //getData('fullname'),
                         builder: (context, AsyncSnapshot<UserInfo?> snapshot) {
                           if (snapshot.hasError) {
