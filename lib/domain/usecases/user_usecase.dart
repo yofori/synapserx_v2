@@ -7,6 +7,7 @@ abstract class UserUseCase {
   Future<UserInfo> fetchUserProfile();
   Future<UserInfo> updateUserProfile(UserInfo userInfo);
   Future<UserInfo> createUserProfile(UserInfo userInfo);
+  Future<void> changePassword(String password);
 }
 
 class UserUseCaseImpl extends UserUseCase {
@@ -32,5 +33,10 @@ class UserUseCaseImpl extends UserUseCase {
   @override
   Future<UserInfo> createUserProfile(UserInfo userInfo) async {
     return await userRepository.createUserProfile(userInfo);
+  }
+
+  @override
+  Future<void> changePassword(String password) async {
+    return await userRepository.changePassword(password);
   }
 }

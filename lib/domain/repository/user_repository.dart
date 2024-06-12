@@ -6,4 +6,5 @@ abstract class UserRepository {
   Future<UserInfo> fetchUserProfile();
   Future<UserInfo> updateUserProfile(UserInfo userInfo);
   Future<UserInfo> createUserProfile(UserInfo userInfo);
+  Future<void> changePassword(String password);
 }

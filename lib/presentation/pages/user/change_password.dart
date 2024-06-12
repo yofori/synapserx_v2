@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:synapserx_v2/domain/usecases/provider.dart';
 
-class ChangePasswordPage extends StatelessWidget {
+class ChangePasswordPage extends ConsumerWidget {
   ChangePasswordPage({super.key});
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Change Password')),
       body: Form(
@@ -31,7 +31,17 @@ class ChangePasswordPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                     ),
-                    onPressed: () async => {},
+                    onPressed: () async => {
+                          if (_formKey.currentState!.validate())
+                            {
+                              ref
+                                  .read(userDataProvider)
+                                  .changePassword(ref
+                                      .watch(confirmPasswordProvider.notifier)
+                                      .state)
+                                  .catchError((e) => {print(e)})
+                            }
+                        },
                     child: const Text(
                       'SUBMIT',
                       style: TextStyle(fontSize: 18),
@@ -53,6 +63,9 @@ class PasswordField extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
+        onChanged: (value) {
+          ref.read(passwordProvider.notifier).update((state) => state = value);
+        },
         validator: (val) {
           if ((val!.isEmpty) ||
               !RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
@@ -90,11 +103,17 @@ class ConfirmPasswordField extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
+        onChanged: (value) {
+          ref
+              .read(confirmPasswordProvider.notifier)
+              .update((state) => state = value);
+        },
         validator: (val) {
-          if ((val!.isEmpty) ||
-              !RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-                  .hasMatch(val)) {
-            return "Password does not meet the minimum requirements";
+          final password = ref.watch(passwordProvider.notifier).state;
+          if (val!.isEmpty) {
+            return "A password is required";
+          } else if (val != password) {
+            return "Passwords do not match";
           }
           return null;
         },
@@ -123,4 +142,12 @@ final passwordVisibilityProvider = StateProvider<bool>((ref) {
 
 final confirmPasswordVisibilityProvider = StateProvider<bool>((ref) {
   return false;
+});
+
+final passwordProvider = StateProvider<String>((ref) {
+  return '';
+});
+
+final confirmPasswordProvider = StateProvider<String>((ref) {
+  return '';
 });

@@ -55,4 +55,14 @@ class UserRepositoryImpl implements UserRepository {
       throw errorMessage;
     }
   }
+
+  @override
+  Future<void> changePassword(String password) async {
+    try {
+      await DioClient.instance.post('/user/changepassword',
+          queryParameters: {"password": password});
+    } on DioException catch (err) {
+      throw err.response.toString();
+    }
+  }
 }

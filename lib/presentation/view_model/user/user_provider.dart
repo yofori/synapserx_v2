@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:synapserx_v2/common/service.dart';
 import 'package:synapserx_v2/domain/models/user.dart';
 import 'package:synapserx_v2/domain/models/user_info.dart';
 import 'package:synapserx_v2/domain/usecases/provider.dart';
@@ -18,10 +17,6 @@ class UserProfile extends _$UserProfile {
   Future<UserInfo> fetchUser() async {
     state = const AsyncLoading();
     final userInfo = await ref.watch(userDataProvider).fetchUserProfile();
-    GlobalData.firstname = userInfo.firstname.toString();
-    GlobalData.surname = userInfo.surname.toString();
-    GlobalData.fullname =
-        '${userInfo.title.toString()} ${userInfo.firstname.toString()} ${userInfo.surname.toString()}';
     return userInfo;
   }
 
@@ -36,5 +31,10 @@ class UserProfile extends _$UserProfile {
   @override
   FutureOr<UserInfo> build() async {
     return fetchUser();
+  }
+
+  Future<void> changePassword(String password) async {
+    state = const AsyncLoading();
+    await ref.watch(userDataProvider).changePassword(password);
   }
 }

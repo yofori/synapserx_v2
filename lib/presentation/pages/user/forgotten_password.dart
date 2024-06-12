@@ -50,6 +50,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(40, 25, 40, 25),
                 child: TextFormField(
+                  key: _formKey,
                   controller: emailController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
