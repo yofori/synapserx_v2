@@ -210,6 +210,7 @@ class RxDrawer extends ConsumerWidget {
                           ),
                           TextButton(
                             onPressed: () {
+                              Navigator.of(context).pop();
                               auth.signOut();
                             },
                             child: const Text('Yes'),

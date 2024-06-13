@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:synapserx_v2/domain/usecases/provider.dart';
+import 'package:synapserx_v2/presentation/pages/widgets/loadingindicator.dart';
+import 'package:synapserx_v2/presentation/pages/widgets/snackbar.dart';
+import 'package:synapserx_v2/providers/auth_provider.dart';
 
 class ChangePasswordPage extends ConsumerWidget {
   ChangePasswordPage({super.key});
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(fireBaseAuthProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Change Password')),
       body: Form(
@@ -34,12 +38,29 @@ class ChangePasswordPage extends ConsumerWidget {
                     onPressed: () async => {
                           if (_formKey.currentState!.validate())
                             {
+                              LoadingIndicatorDialog()
+                                  .show(context, 'Signing in ...'),
                               ref
                                   .read(userDataProvider)
                                   .changePassword(ref
                                       .watch(confirmPasswordProvider.notifier)
                                       .state)
-                                  .catchError((e) => {print(e)})
+                                  .catchError((e) => {
+                                        LoadingIndicatorDialog().dismiss(),
+                                        CustomSnackBar.showErrorSnackBar(
+                                            context,
+                                            message:
+                                                'Cannot change password: $e'),
+                                      })
+                                  .then((_) => {
+                                        CustomSnackBar.showSuccessSnackBar(
+                                            context,
+                                            message:
+                                                'Your passowrd change was successful'),
+                                        LoadingIndicatorDialog().dismiss(),
+                                        auth.signOut(),
+                                        Navigator.of(context).pop(),
+                                      })
                             }
                         },
                     child: const Text(
@@ -98,7 +119,8 @@ class ConfirmPasswordField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPasswordVisible = ref.watch(passwordVisibilityProvider);
+    final isConfirmPasswordVisible =
+        ref.watch(confirmPasswordVisibilityProvider);
 
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -117,17 +139,19 @@ class ConfirmPasswordField extends ConsumerWidget {
           }
           return null;
         },
-        obscureText: !isPasswordVisible,
+        obscureText: !isConfirmPasswordVisible,
         decoration: InputDecoration(
           labelText: 'Confirm New Password',
           border: const OutlineInputBorder(),
           suffixIcon: IconButton(
             icon: Icon(
-              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              isConfirmPasswordVisible
+                  ? Icons.visibility
+                  : Icons.visibility_off,
             ),
             onPressed: () {
-              ref.read(passwordVisibilityProvider.notifier).state =
-                  !isPasswordVisible;
+              ref.read(confirmPasswordVisibilityProvider.notifier).state =
+                  !isConfirmPasswordVisible;
             },
           ),
         ),
