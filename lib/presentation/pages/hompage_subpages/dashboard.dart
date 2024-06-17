@@ -63,19 +63,17 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
   }
 
   Future<void> getUserDetails() async {
-    final userProfile =
-        await ref.read(settingsProvider).getUserInfoFromStorage();
-    if (userProfile == null) {
-      try {
-        await ref
-            .read(userDataProvider)
-            .fetchUserProfile()
-            .then((userInfo) async => {
-                  await ref
-                      .read(settingsProvider)
-                      .setUserInfoToStorage(userInfo),
-                });
-      } catch (err) {
+    try {
+      await ref
+          .read(userDataProvider)
+          .fetchUserProfile()
+          .then((userInfo) async => {
+                await ref.read(settingsProvider).setUserInfoToStorage(userInfo),
+              });
+    } catch (err) {
+      final userProfile =
+          await ref.read(settingsProvider).getUserInfoFromStorage();
+      if (userProfile == null) {
         if (mounted) {
           showDialog(
             context: context,
@@ -99,7 +97,11 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                           ModalRoute.withName('/'));
                     },
                     child: const Text("Create Profile")),
-                TextButton(onPressed: () {}, child: const Text('Cancel'))
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'))
               ],
             ),
           );

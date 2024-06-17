@@ -4,6 +4,7 @@ part 'useraccounts.freezed.dart';
 
 @freezed
 class UserAccount with _$UserAccount {
+  @JsonSerializable(explicitToJson: true)
   const factory UserAccount(
       {required String institutionName,
       String? institutionAddress,

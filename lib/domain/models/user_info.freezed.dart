@@ -36,7 +36,7 @@ mixin _$UserInfo {
   List<String>? get specialty => throw _privateConstructorUsedError;
   dynamic get signature =>
       throw _privateConstructorUsedError; //DateTime? lastLogin,
-  List<dynamic>? get prescriberInstitutions =>
+  List<UserAccount>? get prescriberInstitutions =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -60,7 +60,7 @@ abstract class $UserInfoCopyWith<$Res> {
       String? telephoneNo,
       List<String>? specialty,
       dynamic signature,
-      List<dynamic>? prescriberInstitutions});
+      List<UserAccount>? prescriberInstitutions});
 }
 
 /// @nodoc
@@ -127,7 +127,7 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
       prescriberInstitutions: freezed == prescriberInstitutions
           ? _value.prescriberInstitutions
           : prescriberInstitutions // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<UserAccount>?,
     ) as $Val);
   }
 }
@@ -150,7 +150,7 @@ abstract class _$$UserInfoImplCopyWith<$Res>
       String? telephoneNo,
       List<String>? specialty,
       dynamic signature,
-      List<dynamic>? prescriberInstitutions});
+      List<UserAccount>? prescriberInstitutions});
 }
 
 /// @nodoc
@@ -215,7 +215,7 @@ class __$$UserInfoImplCopyWithImpl<$Res>
       prescriberInstitutions: freezed == prescriberInstitutions
           ? _value._prescriberInstitutions
           : prescriberInstitutions // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<UserAccount>?,
     ));
   }
 }
@@ -234,7 +234,7 @@ class _$UserInfoImpl implements _UserInfo {
       this.telephoneNo,
       final List<String>? specialty,
       this.signature,
-      final List<dynamic>? prescriberInstitutions})
+      final List<UserAccount>? prescriberInstitutions})
       : _specialty = specialty,
         _prescriberInstitutions = prescriberInstitutions;
 
@@ -275,10 +275,10 @@ class _$UserInfoImpl implements _UserInfo {
   @override
   final dynamic signature;
 //DateTime? lastLogin,
-  final List<dynamic>? _prescriberInstitutions;
+  final List<UserAccount>? _prescriberInstitutions;
 //DateTime? lastLogin,
   @override
-  List<dynamic>? get prescriberInstitutions {
+  List<UserAccount>? get prescriberInstitutions {
     final value = _prescriberInstitutions;
     if (value == null) return null;
     if (_prescriberInstitutions is EqualUnmodifiableListView)
@@ -355,7 +355,7 @@ abstract class _UserInfo implements UserInfo {
       final String? telephoneNo,
       final List<String>? specialty,
       final dynamic signature,
-      final List<dynamic>? prescriberInstitutions}) = _$UserInfoImpl;
+      final List<UserAccount>? prescriberInstitutions}) = _$UserInfoImpl;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) =
       _$UserInfoImpl.fromJson;
@@ -384,7 +384,7 @@ abstract class _UserInfo implements UserInfo {
   @override
   dynamic get signature;
   @override //DateTime? lastLogin,
-  List<dynamic>? get prescriberInstitutions;
+  List<UserAccount>? get prescriberInstitutions;
   @override
   @JsonKey(ignore: true)
   _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>

@@ -438,7 +438,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   Future<void> updateUserInfo() async {
+    final useremail = await Authentication().getFirebaseUserEmail();
     UserInfo userInfo = UserInfo(
+        email: useremail,
         firstname: firstnameController.text,
         surname: surnameController.text,
         telephoneNo: telephoneController.text,
@@ -488,9 +490,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       LoadingIndicatorDialog().dismiss();
       CustomSnackBar.showSuccessSnackBar(context,
           message: 'Your profile has been successfully createdd');
-      // if (isSignaturechanged) {
-      //   GlobalData.signature = base64.encode(signatureImage as List<int>);
-      // }
       if (context.mounted) {
         Navigator.of(context).pop();
       }

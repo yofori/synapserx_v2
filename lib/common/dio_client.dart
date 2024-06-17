@@ -75,7 +75,6 @@ class DioClient {
         return response.data;
       }
     } on DioException catch (e) {
-      log(e.response!.data.toString());
       String errorMessage = _handleDioExceptionError(e);
       throw errorMessage;
     }
@@ -99,12 +98,12 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return response.data;
       }
-      throw "something went wrong";
-    } catch (e) {
-      rethrow;
+    } on DioException catch (e) {
+      String errorMessage = _handleDioExceptionError(e);
+      throw errorMessage;
     }
   }
 

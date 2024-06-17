@@ -162,7 +162,8 @@ class __$$UserAccountImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$UserAccountImpl implements _UserAccount {
   const _$UserAccountImpl(
       {required this.institutionName,

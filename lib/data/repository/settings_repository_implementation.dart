@@ -1,8 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:synapserx_v2/common/dio_client.dart';
+import 'package:synapserx_v2/data/repository/user_repository_implementation.dart';
 import 'package:synapserx_v2/domain/models/user_info.dart';
+import 'package:synapserx_v2/domain/models/useraccounts.dart';
 import 'package:synapserx_v2/domain/repository/settings_repository.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
@@ -19,9 +21,26 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   @override
   Future<void> setUserInfoToStorage(UserInfo user) async {
-    log('saving setting to local storage');
     final String userJson = jsonEncode(user.toJson());
-    log(userJson);
     await storage.write(key: 'profile', value: userJson);
+  }
+
+  @override
+  Future<List<UserAccount>> getUserAccounts() async {
+    final userInfo = await UserRepositoryImpl().fetchUserProfile();
+    final userAccounts = userInfo.prescriberInstitutions ?? [];
+    return userAccounts;
+  }
+
+  @override
+  Future<void> addUserAccount(UserAccount userAccount) async {
+    await DioClient.instance
+        .put('/user/addinstitution', data: jsonEncode(userAccount));
+  }
+
+  @override
+  Future<void> updateUserAccount(UserAccount userAccount) async {
+    await DioClient.instance
+        .put('/user/updateinstitution', data: jsonEncode(userAccount));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:synapserx_v2/domain/models/useraccounts.dart';
 
 part 'user_info.freezed.dart';
 part 'user_info.g.dart';
@@ -23,7 +24,7 @@ class UserInfo with _$UserInfo {
     List<String>? specialty,
     dynamic signature,
     //DateTime? lastLogin,
-    List<dynamic>? prescriberInstitutions,
+    List<UserAccount>? prescriberInstitutions,
     // DateTime? createdAt,
     // DateTime? updatedAt,
     // @JsonKey(name: '__v') int? v,

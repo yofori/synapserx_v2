@@ -19,7 +19,9 @@ _$UserInfoImpl _$$UserInfoImplFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       signature: json['signature'],
-      prescriberInstitutions: json['prescriberInstitutions'] as List<dynamic>?,
+      prescriberInstitutions: (json['prescriberInstitutions'] as List<dynamic>?)
+          ?.map((e) => UserAccount.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$UserInfoImplToJson(_$UserInfoImpl instance) =>
@@ -33,5 +35,6 @@ Map<String, dynamic> _$$UserInfoImplToJson(_$UserInfoImpl instance) =>
       'telephoneNo': instance.telephoneNo,
       'specialty': instance.specialty,
       'signature': instance.signature,
-      'prescriberInstitutions': instance.prescriberInstitutions,
+      'prescriberInstitutions':
+          instance.prescriberInstitutions?.map((e) => e.toJson()).toList(),
     };

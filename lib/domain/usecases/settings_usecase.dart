@@ -1,9 +1,12 @@
 import 'package:synapserx_v2/domain/models/user_info.dart';
+import 'package:synapserx_v2/domain/models/useraccounts.dart';
 import 'package:synapserx_v2/domain/repository/settings_repository.dart';
 
 abstract class SettingsUseCase {
   Future<UserInfo?> getUserInfoFromStorage();
   Future<void> setUserInfoToStorage(UserInfo user);
+  Future<List<UserAccount>> getUserAccountsFromStorage();
+  Future<void> addUserAccount(UserAccount userAccount);
 }
 
 class SettingsUseCaseImpl extends SettingsUseCase {
@@ -19,5 +22,15 @@ class SettingsUseCaseImpl extends SettingsUseCase {
   @override
   Future<void> setUserInfoToStorage(UserInfo user) async {
     await settingsRepository.setUserInfoToStorage(user);
+  }
+
+  @override
+  Future<List<UserAccount>> getUserAccountsFromStorage() async {
+    return await settingsRepository.getUserAccounts();
+  }
+
+  @override
+  Future<void> addUserAccount(UserAccount userAccount) async {
+    await settingsRepository.addUserAccount(userAccount);
   }
 }
