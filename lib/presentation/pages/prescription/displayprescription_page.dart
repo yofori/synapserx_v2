@@ -9,6 +9,8 @@ import 'package:synapserx_v2/domain/usecases/provider.dart';
 import 'package:synapserx_v2/presentation/pages/prescription/editprescriptions.dart';
 import 'package:synapserx_v2/presentation/view_model/prescriptions/prescriptions_provider.dart';
 
+import '../../view_model/transactions/transactions_provider.dart';
+
 final retrievedRxProvider = StateProvider<Prescription>((ref) =>
     Prescription(pxId: '', pxSurname: '', pxFirstname: '', pxgender: ''));
 
@@ -358,6 +360,8 @@ class PrescriptionActionBar extends ConsumerWidget {
                                 content: const Text('Prescription deleted'),
                                 backgroundColor: Colors.green.shade300,
                               ));
+                              Navigator.pop(context);
+                              ref.invalidate(fetchTransactionsProvider);
                             });
                           },
                           child: const Text(

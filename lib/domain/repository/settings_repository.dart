@@ -7,4 +7,6 @@ abstract class SettingsRepository {
   Future<List<UserAccount>> getUserAccounts();
   Future<void> addUserAccount(UserAccount userAccount);
   Future<void> updateUserAccount(UserAccount userAccount);
+  Future<void> makeInstituitionDefault(String accountID);
+  Future<void> deleteUserAccount(String accountID);
 }

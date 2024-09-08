@@ -11,7 +11,7 @@ class UserAccount with _$UserAccount {
       String? institutionTelephone,
       String? institutionEmail,
       @Default(false) bool defaultAccount,
-      String? id}) = _UserAccount;
+      @JsonKey(name: '_id') String? id}) = _UserAccount;
 
   factory UserAccount.fromJson(Map<String, dynamic> json) =>
       _$UserAccountFromJson(json);

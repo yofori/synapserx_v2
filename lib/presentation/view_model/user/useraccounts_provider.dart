@@ -26,4 +26,34 @@ class UserAccounts extends _$UserAccounts {
       return _fetchUserAccounts();
     });
   }
+
+  Future<void> makeInstituitionDefault(String accountID) async {
+    // Set the state to loading
+    state = const AsyncValue.loading();
+    // Add the new todo and reload the todo list from the remote repository
+    state = await AsyncValue.guard(() async {
+      await ref.read(settingsProvider).makeInstituitionDefault(accountID);
+      return _fetchUserAccounts();
+    });
+  }
+
+  Future<void> deleteUserAccount(String accountID) async {
+    // Set the state to loading
+    state = const AsyncValue.loading();
+    // Add the new todo and reload the todo list from the remote repository
+    state = await AsyncValue.guard(() async {
+      await ref.read(settingsProvider).deleteUserAccount(accountID);
+      return _fetchUserAccounts();
+    });
+  }
+
+  Future<void> updateUserAccount(UserAccount userAccount) async {
+    // Set the state to loading
+    state = const AsyncValue.loading();
+    // Add the new todo and reload the todo list from the remote repository
+    state = await AsyncValue.guard(() async {
+      await ref.read(settingsProvider).updateUserAccount(userAccount);
+      return _fetchUserAccounts();
+    });
+  }
 }

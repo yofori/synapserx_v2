@@ -25,6 +25,7 @@ mixin _$UserAccount {
   String? get institutionTelephone => throw _privateConstructorUsedError;
   String? get institutionEmail => throw _privateConstructorUsedError;
   bool get defaultAccount => throw _privateConstructorUsedError;
+  @JsonKey(name: '_id')
   String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,7 +46,7 @@ abstract class $UserAccountCopyWith<$Res> {
       String? institutionTelephone,
       String? institutionEmail,
       bool defaultAccount,
-      String? id});
+      @JsonKey(name: '_id') String? id});
 }
 
 /// @nodoc
@@ -111,7 +112,7 @@ abstract class _$$UserAccountImplCopyWith<$Res>
       String? institutionTelephone,
       String? institutionEmail,
       bool defaultAccount,
-      String? id});
+      @JsonKey(name: '_id') String? id});
 }
 
 /// @nodoc
@@ -171,7 +172,7 @@ class _$UserAccountImpl implements _UserAccount {
       this.institutionTelephone,
       this.institutionEmail,
       this.defaultAccount = false,
-      this.id});
+      @JsonKey(name: '_id') this.id});
 
   factory _$UserAccountImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserAccountImplFromJson(json);
@@ -188,6 +189,7 @@ class _$UserAccountImpl implements _UserAccount {
   @JsonKey()
   final bool defaultAccount;
   @override
+  @JsonKey(name: '_id')
   final String? id;
 
   @override
@@ -245,7 +247,7 @@ abstract class _UserAccount implements UserAccount {
       final String? institutionTelephone,
       final String? institutionEmail,
       final bool defaultAccount,
-      final String? id}) = _$UserAccountImpl;
+      @JsonKey(name: '_id') final String? id}) = _$UserAccountImpl;
 
   factory _UserAccount.fromJson(Map<String, dynamic> json) =
       _$UserAccountImpl.fromJson;
@@ -261,6 +263,7 @@ abstract class _UserAccount implements UserAccount {
   @override
   bool get defaultAccount;
   @override
+  @JsonKey(name: '_id')
   String? get id;
   @override
   @JsonKey(ignore: true)

@@ -7,6 +7,7 @@ abstract class SettingsUseCase {
   Future<void> setUserInfoToStorage(UserInfo user);
   Future<List<UserAccount>> getUserAccountsFromStorage();
   Future<void> addUserAccount(UserAccount userAccount);
+  Future<void> makeInstituitionDefault(String accountID);
 }
 
 class SettingsUseCaseImpl extends SettingsUseCase {
@@ -32,5 +33,10 @@ class SettingsUseCaseImpl extends SettingsUseCase {
   @override
   Future<void> addUserAccount(UserAccount userAccount) async {
     await settingsRepository.addUserAccount(userAccount);
+  }
+
+  @override
+  Future<void> makeInstituitionDefault(String accountID) async {
+    return await settingsRepository.makeInstituitionDefault(accountID);
   }
 }

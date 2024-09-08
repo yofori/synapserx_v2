@@ -13,7 +13,7 @@ _$UserAccountImpl _$$UserAccountImplFromJson(Map<String, dynamic> json) =>
       institutionTelephone: json['institutionTelephone'] as String?,
       institutionEmail: json['institutionEmail'] as String?,
       defaultAccount: json['defaultAccount'] as bool? ?? false,
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
     );
 
 Map<String, dynamic> _$$UserAccountImplToJson(_$UserAccountImpl instance) =>
@@ -23,5 +23,5 @@ Map<String, dynamic> _$$UserAccountImplToJson(_$UserAccountImpl instance) =>
       'institutionTelephone': instance.institutionTelephone,
       'institutionEmail': instance.institutionEmail,
       'defaultAccount': instance.defaultAccount,
-      'id': instance.id,
+      '_id': instance.id,
     };
